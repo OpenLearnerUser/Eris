@@ -3,16 +3,17 @@
 #include <vector>
 
 #include <Eris/array.h>
+#include <Eris/ArrayAccessor1.h>
 
 
 namespace Eris{
 
     template <typename T>
-    class Array<T,1>final{
+    class Array<T,1> final{
         public:
         typedef std::vector<T> ContainerType;
-        typedef std::vector<T>::iterator Iterator;
-        typedef std::vector<T>::const_iterator ConstIterator;
+        typedef typename std::vector<T>::iterator Iterator;
+        typedef typename std::vector<T>::const_iterator ConstIterator;
 
         //! Constructs zero-sized 1-D array.
         Array();
@@ -132,7 +133,7 @@ namespace Eris{
         //! \endcode
         //!
         template <typename CallBack>
-        forEachIndex(CallBack func)const;
+        void forEachIndex(CallBack func)const;
         //!
         //! \brief Iterates the array and invoke given \p func for each element in
         //!     parallel using multi-threading.
@@ -153,8 +154,8 @@ namespace Eris{
         //! The parameter type of the callback function doesn't have to be T&, but
         //! const T& or T can be used as well.
         //!
-        template <typename Callback>
-        void parallelForEach(Callback func);
+        // template <typename Callback>
+        // void parallelForEach(Callback func);
 
         //!
         //! \brief Iterates the array and invoke given \p func for each index in
@@ -173,8 +174,8 @@ namespace Eris{
         //! });
         //! \endcode
         //!
-        template <typename Callback>
-        void parallelForEachIndex(Callback func) const;
+        // template <typename Callback>
+        // void parallelForEachIndex(Callback func) const;
 
         //! Returns the reference to i-th element.
         T &operator[](size_t i);
@@ -207,6 +208,7 @@ namespace Eris{
 
     template <typename T>
     using Array1=Array<T,1>;
+  
 
 }
 

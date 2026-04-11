@@ -19,11 +19,11 @@ namespace Eris{
     template <typename T>
     Array<T, 1>::Array(const std::initializer_list<T> &lst)
     {
-        set(list)
+        set(lst);
     };
 
     template<typename T>
-    Array<T,1>Array(const Array& others){
+    Array<T,1>::Array(const Array& others){
         set(others);
 
     };
@@ -101,6 +101,107 @@ namespace Eris{
     {
         return _data.data();
     }
+
+    template <typename T>
+    typename   Array<T,1>::ContainerType::iterator  Array<T,1>::begin(){
+        return _data.begin();
+    }
+    template <typename T>
+    typename Array<T,1>::ContainerType::const_iterator Array<T,1>::begin()const{
+        return _data.cbegin();
+    }
+    template <typename T>
+    typename Array<T, 1>::ContainerType::iterator Array<T, 1>::end() {
+        return _data.end();
+    }
+
+    template <typename T>
+    typename Array<T, 1>::ContainerType::const_iterator Array<T, 1>::end() const {
+        return _data.cend();
+    }
+    template<typename T>
+    ArrayAccessor1<T> Array<T,1>::accessor(){
+        return ArrayAccessor(size(),data());
+    }
+
+    template <typename T>
+    ConstArrayAccessor1<T> Array<T, 1>::constAccessor() const {
+        return ConstArrayAccessor1<T>(size(), data());
+    }
+
+
+    template <typename T>
+    void Array<T,1>::swap(Array& other){
+        std::swap(other._data,_data);
+    }
+
+    template <typename T>
+    void Array<T, 1>::append(const T& newVal) {
+        _data.push_back(newVal);
+    }
+
+    template <typename T>
+    void Array<T, 1>::append(const Array& other) {
+        _data.insert(_data.end(), other._data.begin(), other._data.end());
+    }
+
+    template<typename T>
+    template<typename CallBack>
+    void Array<T,1>::forEach(CallBack fun)const{
+        constAccessor().forEach(fun);
+    }
+
+
+    template<typename T>
+    template <typename CallBack>
+    void Array<T,1>::forEachIndex(CallBack func)const{
+        constAccessor().forEachIndex(func);
+    }
+
+    template <typename T>
+    T& Array<T, 1>::operator[](size_t i) {
+        return _data[i];
+    }
+
+    template <typename T>
+    const T& Array<T, 1>::operator[](size_t i) const {
+        return _data[i];
+    }
+
+    template <typename T>
+    Array<T, 1>& Array<T, 1>::operator=(const T& value) {
+        set(value);
+        return *this;
+    }
+
+    template <typename T>
+    Array<T, 1>& Array<T, 1>::operator=(const Array& other) {
+        set(other);
+        return *this;
+    }
+
+    template <typename T>
+    Array<T, 1>& Array<T, 1>::operator=(Array&& other) {
+        _data = std::move(other._data);
+        return *this;
+    }
+
+    template <typename T>
+    Array<T, 1>::operator ArrayAccessor1<T>() {
+        return accessor();
+    }
+
+    template <typename T>
+    Array<T, 1>::operator ConstArrayAccessor1<T>() const {
+        return constAccessor();
+    }
+
+    template <typename T>
+    Array<T, 1>& Array<T, 1>::operator=(const std::initializer_list<T>& lst) {
+        set(lst);
+        return *this;
+    }
+
 
 
     
