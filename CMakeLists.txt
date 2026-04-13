@@ -28,7 +28,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES "Release")
 endif()
 
 # Configure tasking system backend
-#include(cmake/TaskingSystemOptions.cmake)
+include(cmake/TaskingSystemOptions.cmake)
 
 # Compile options
 include(cmake/CompileOptions.cmake)
