@@ -1,0 +1,5 @@
+{
+    "cmake.configureArgs": [
+        "-DERSI_TASKING_SYSTEM=CPP11Threads"
+    ]
+}

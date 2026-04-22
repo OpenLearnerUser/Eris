@@ -65,7 +65,7 @@ namespace Eris
     template <typename IndexType, typename Function>
     void parallelRangeFor(IndexType beginIndex, IndexType endIndex,
                           const Function &function,
-                          ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                          ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Makes a 2D nested for-loop in parallel.
@@ -89,7 +89,7 @@ namespace Eris
     void parallelFor(IndexType beginIndexX, IndexType endIndexX,
                      IndexType beginIndexY, IndexType endIndexY,
                      const Function &function,
-                     ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                     ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Makes a 2D nested range-loop in parallel.
@@ -114,7 +114,7 @@ namespace Eris
     void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
                           IndexType beginIndexY, IndexType endIndexY,
                           const Function &function,
-                          ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                          ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Makes a 3D nested for-loop in parallel.
@@ -141,7 +141,7 @@ namespace Eris
                      IndexType beginIndexY, IndexType endIndexY,
                      IndexType beginIndexZ, IndexType endIndexZ,
                      const Function &function,
-                     ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                     ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Performs reduce operation in parallel.
@@ -165,7 +165,7 @@ namespace Eris
     Value parallelReduce(IndexType beginIndex, IndexType endIndex,
                          const Value &identity, const Function &func,
                          const Reduce &reduce,
-                         ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                         ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Sorts a container in parallel.
@@ -180,7 +180,7 @@ namespace Eris
     //!
     template <typename RandomIterator>
     void parallelSort(RandomIterator begin, RandomIterator end,
-                      ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                      ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Sorts a container in parallel with a custom compare function.
@@ -200,7 +200,7 @@ namespace Eris
     template <typename RandomIterator, typename CompareFunction>
     void parallelSort(RandomIterator begin, RandomIterator end,
                       CompareFunction compare,
-                      ExecutionPolicy policy = ExecutionPolicy::kParallel);
+                      ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //! Sets maximum number of threads to use.
     void setMaxNumberOfThreads(unsigned int numThreads);
