@@ -181,7 +181,7 @@ namespace Eris
 #ifdef ERSI_TASKING_CPP11THREADS
         unsigned int numThreadsHint = maxNumberOfThreads();
 
-        const unsigned int numThreads=(policy=ExecutionPolicy::KParallel)
+        const unsigned int numThreads=(policy==ExecutionPolicy::KParallel)
                                         ?(numThreadsHint=0u?8u:numThreadsHint):1;
         Indextype n=end-start+1;
         Indextype slice=(Indextype)std::round(n/static_cast<double>(numThreads));
