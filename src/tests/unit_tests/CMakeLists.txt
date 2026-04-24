@@ -36,4 +36,18 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
         )
 endif ()
 
+target_compile_options(
+    ${tareget}
+    PRIVATE
+    ${DEFAULT_COMPILE_OPTIONS}
+)
+
+# Link libraries
+target_link_libraries(${target}
+    PRIVATE
+    ${DEFAULT_LINKER_OPTIONS}
+    Eris
+    gmock
+    gtest)
+
 

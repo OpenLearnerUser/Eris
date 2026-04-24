@@ -1,7 +1,7 @@
 # CMake version
 cmake_minimum_required(VERSION 3.12.8 FATAL_ERROR)
 # Declare project
-project(Eris)
+project(PEris)
 
 # Include cmake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -63,6 +63,15 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 
 
+add_subdirectory(src/Eris)
+
+
+
+
+
+
+
+
 
 # Target name
 set(target hello_fluid_sim)
@@ -77,6 +86,13 @@ file(GLOB sources
 # Build executable
 add_executable(${target}
     ${sources})
+
+target_link_directories(${target}
+PRIVATE
+${DEFAULT_LINKER_OPTIONS}
+Eris
+
+)
 
 
 
