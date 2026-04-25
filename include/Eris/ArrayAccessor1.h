@@ -118,8 +118,8 @@ public:
     //! The parameter type of the callback function doesn't have to be T&, but
     //! const T& or T can be used as well.
     //!
-    // template <typename Callback>
-    // void parallelForEach(Callback func);
+    template <typename Callback>
+    void parallelForEach(Callback func);
 
     //!
     //! \brief Iterates the array and invoke given \p func for each index in
@@ -139,8 +139,8 @@ public:
     //! });
     //! \endcode
     //!
-    // template <typename Callback>
-    // void parallelForEachIndex(Callback func) const;
+    template <typename Callback>
+    void parallelForEachIndex(Callback func) const;
 
     //! Returns the reference to i-th element.
     T& operator[](size_t i);
@@ -248,8 +248,8 @@ class ConstArrayAccessor<T, 1> {
     //! });
     //! \endcode
     //!
-    // template <typename Callback>
-    // void parallelForEachIndex(Callback func) const;
+    template <typename Callback>
+    void parallelForEachIndex(Callback func) const;
 
     const T& operator[](size_t i)const;
 

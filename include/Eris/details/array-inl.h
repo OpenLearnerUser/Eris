@@ -156,7 +156,20 @@ namespace Eris{
     template <typename CallBack>
     void Array<T,1>::forEachIndex(CallBack func)const{
         constAccessor().forEachIndex(func);
+    };
+    template<typename T>
+    template <typename Callback>
+    void Array<T,1>::parallelForEach(Callback func){
+         accessor().parallelForEach(func);
+    };
+
+    template<typename T>
+    template <typename Callback>
+    void Array<T,1>::parallelForEachIndex(Callback func) const{
+
+        constAccessor().parallelForEachIndex(func);
     }
+
 
     template <typename T>
     T& Array<T, 1>::operator[](size_t i) {

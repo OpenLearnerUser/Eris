@@ -3,6 +3,7 @@
 
 #include <Eris/macro.h>
 #include <utility>  // just make cpplint happy..
+#include<Eris/parallel.h>
 
 
 namespace Eris{
@@ -103,6 +104,19 @@ namespace Eris{
 
     //TODO::parallel
 
+    template <typename T>
+    template <typename Callback>
+    void ArrayAccessor<T, 1>::parallelForEach(Callback func){
+        paralleFor(kZeroSize,size(),[&](size_t i){
+            func(i);
+        });
+    }
+    template <typename T>
+    template <typename Callback>
+    void ArrayAccessor<T, 1>::parallelForEachIndex(Callback func) const{
+        paralleFor(kZeroSize,size(),func);
+    }
+
 
 
     template <typename T>
@@ -192,11 +206,11 @@ namespace Eris{
         }
     }
 
-    // template <typename T>
-    // template <typename Callback>
-    // void ConstArrayAccessor<T, 1>::parallelForEachIndex(Callback func) const {
-    //     parallelFor(kZeroSize, size(), func);
-    // }
+    template <typename T>
+    template <typename Callback>
+    void ConstArrayAccessor<T, 1>::parallelForEachIndex(Callback func) const {
+        parallelFor(kZeroSize, size(), func);
+    }
 
     template <typename T>
     const T& ConstArrayAccessor<T, 1>::operator[](size_t i) const {

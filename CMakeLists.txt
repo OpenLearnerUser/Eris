@@ -1,4 +1,4 @@
-# CMake version
+﻿# CMake version
 cmake_minimum_required(VERSION 3.12.8 FATAL_ERROR)
 # Declare project
 project(PEris)
@@ -87,7 +87,7 @@ file(GLOB sources
 add_executable(${target}
     ${sources})
 
-target_link_directories(${target}
+target_link_libraries(${target}
 PRIVATE
 ${DEFAULT_LINKER_OPTIONS}
 Eris

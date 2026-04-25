@@ -129,7 +129,7 @@ namespace Eris
             return;
         }
 #ifdef ERSI_TASKING_CPP11THREADS
-        unsigned int numThreadsHint = maxNumberOfThreads();
+        unsigned int numThreadsHint = Eris::maxNumberOfThreads();
         const unsigned int numThreads =
         (policy == ExecutionPolicy::KParallel)
             ? (numThreadsHint == 0u ? 8u : numThreadsHint)
