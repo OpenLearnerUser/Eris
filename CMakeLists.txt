@@ -76,8 +76,7 @@ add_subdirectory(src/Eris)
 # Target name
 set(target hello_fluid_sim)
 
-# Includes
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 
 # Sources
 file(GLOB sources
@@ -86,6 +85,10 @@ file(GLOB sources
 # Build executable
 add_executable(${target}
     ${sources})
+
+# Includes
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${target}  PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 target_link_libraries(${target}
 PRIVATE

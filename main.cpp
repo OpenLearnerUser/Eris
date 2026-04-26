@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Eris/array1.h>
 #include <Eris/parallel.h>
+#include <Eris/point2.h>
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -12,7 +13,7 @@ using namespace Eris;
 
 
 void testParallelForWithVector() {
-    const size_t N = 1000000;  // 一千万个元素
+    const size_t N = 1000;  // 一千万个元素
     std::vector<double> data(N);
     
     std::cout << std::fixed << std::setprecision(6);
@@ -131,17 +132,21 @@ std::cout << "和: " << atomic_sum.load() << std::endl;
 int main(int argc, char **argv)
 {
 
-    std::cout << "=== paralleFor 函数测试 ===" << std::endl;
-    std::cout << "硬件并发线程数: " << std::thread::hardware_concurrency() << std::endl;
-    std::cout << std::endl;
+    // std::cout << "=== paralleFor 函数测试 ===" << std::endl;
+    // std::cout << "硬件并发线程数: " << std::thread::hardware_concurrency() << std::endl;
+    // std::cout << std::endl;
     
-    try {
-        testParallelForWithVector();
-    } catch(const std::exception& e) {
-        std::cerr << "测试过程中发生异常: " << e.what() << std::endl;
-        return 1;
-    }
+    // try {
+    //     testParallelForWithVector();
+    // } catch(const std::exception& e) {
+    //     std::cerr << "测试过程中发生异常: " << e.what() << std::endl;
+    //     return 1;
+    // }
     
-    std::cout << "\n所有测试完成！" << std::endl;
+    // std::cout << "\n所有测试完成！" << std::endl;
+
+    Point<double, 3> a;
+    a={1,2,4};
+    std::cout<<"a="<<a[1]<<std::endl;
     return 0;
 }

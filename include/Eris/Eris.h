@@ -12,4 +12,7 @@
 #include <Eris/array1.h>
 #include <Eris/constant.h>
 #include <Eris/macro.h>
+#include <Eris/math_utils.h>
 #include <Eris/parallel.h>
+#include <Eris/point.h>
+#include <Eris/point2.h>
