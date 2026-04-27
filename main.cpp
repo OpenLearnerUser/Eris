@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Eris/array1.h>
 #include <Eris/parallel.h>
-#include <Eris/point2.h>
+#include <Eris/point3.h>
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
     
     // std::cout << "\n所有测试完成！" << std::endl;
 
-    Point<double, 3> a;
+    Point3<double> a;
     a={1,2,4};
     std::cout<<"a="<<a[1]<<std::endl;
     return 0;

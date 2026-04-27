@@ -10,8 +10,16 @@ file(GLOB source ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 set(Eris_head_gen_py ${CMAKE_SOURCE_DIR}/scripts/header_gen.py)
 
+if(NOT DEFINED PYTHON_EXECUTABLE)
+    find_program(
+        PYTHON_EXECUTABLE NAMES
+        pyhton py python3
+        REQUIRED
+    )
+endif()
+
 add_custom_command(
-  COMMAND python ${Eris_head_gen_py}
+  COMMAND ${PYTHON_EXECUTABLE} ${Eris_head_gen_py}
   DEPENDS ${headers}
 
   OUTPUT ${root_dir}/include/Eris.h

@@ -16,3 +16,4 @@
 #include <Eris/parallel.h>
 #include <Eris/point.h>
 #include <Eris/point2.h>
+#include <Eris/point3.h>
