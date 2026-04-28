@@ -17,3 +17,4 @@
 #include <Eris/point.h>
 #include <Eris/point2.h>
 #include <Eris/point3.h>
+#include <Eris/size3.h>
