@@ -10,20 +10,18 @@ file(GLOB source ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 set(Eris_head_gen_py ${CMAKE_SOURCE_DIR}/scripts/header_gen.py)
 
-if(NOT DEFINED PYTHON_EXECUTABLE)
-    find_program(
-        PYTHON_EXECUTABLE NAMES
-        pyhton py python3
-        REQUIRED
-    )
-endif()
+# if(NOT DEFINED PYTHON_EXECUTABLE)
+#     find_program(PYTHON_EXECUTABLE NAMES python python3 py)
+    
+#     if(NOT PYTHON_EXECUTABLE)
+#         message(FATAL_ERROR "Python not found! Please install Python or set PYTHON_EXECUTABLE")
+#     endif()
+# endif()
 
 add_custom_command(
-  COMMAND ${PYTHON_EXECUTABLE} ${Eris_head_gen_py}
+  COMMAND python ${Eris_head_gen_py}
   DEPENDS ${headers}
-
   OUTPUT ${root_dir}/include/Eris.h
-
 )
 add_custom_target(
     Eris_head_gen_py  ALL DEPENDS ${root_dir}/include/Eris.h

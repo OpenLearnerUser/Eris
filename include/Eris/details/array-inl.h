@@ -1,6 +1,7 @@
 #pragma once
 
-
+#include <Eris/macro.h>
+#include <Eris/parallel.h>
 #include <utility>
 #include <algorithm>
 #include <vector>

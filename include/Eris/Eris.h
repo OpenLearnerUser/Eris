@@ -10,6 +10,7 @@
 #include <Eris/Eris.h>
 #include <Eris/array.h>
 #include <Eris/array1.h>
+#include <Eris/array2.h>
 #include <Eris/constant.h>
 #include <Eris/macro.h>
 #include <Eris/math_utils.h>
@@ -17,4 +18,6 @@
 #include <Eris/point.h>
 #include <Eris/point2.h>
 #include <Eris/point3.h>
+#include <Eris/size.h>
+#include <Eris/size2.h>
 #include <Eris/size3.h>

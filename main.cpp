@@ -3,12 +3,14 @@
 #include <Eris/parallel.h>
 #include <Eris/point3.h>
 #include <Eris/size3.h>
+#include <Eris/size2.h>
 #include <vector>
 #include <chrono>
 #include <thread>
 #include <atomic>
 #include <cmath>
 #include <iomanip>
+#include <Eris/size.h>
 using namespace Eris;
 
 
