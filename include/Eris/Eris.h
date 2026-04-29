@@ -7,6 +7,7 @@
 #pragma once
 #include <Eris/ArrayAccessor.h>
 #include <Eris/ArrayAccessor1.h>
+#include <Eris/ArrayAccessor2.h>
 #include <Eris/Eris.h>
 #include <Eris/array.h>
 #include <Eris/array1.h>

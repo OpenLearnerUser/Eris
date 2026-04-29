@@ -3,8 +3,9 @@
 #include <vector>
 
 #include <Eris/array.h>
-#include <Eris/ArrayAccessor1.h>
+#include <Eris/ArrayAccessor2.h>
 #include <Eris/size2.h>
+#include <Eris/point2.h>
 
 namespace Eris
 {
@@ -23,7 +24,7 @@ namespace Eris
         //! Constructs 1-D array with given \p size and fill it with \p initVal.
         //! \param size Initial size of the array.
         //! \param initVal Initial value of each array element.
-        explicit Array(const Size2$ size, const T &initVal = T());
+        explicit Array(const Size2& size, const T &initVal = T());
 
         //! Constructs 2-D array with size \p width x \p height and fill it with
         //! \p initVal.
@@ -50,7 +51,7 @@ namespace Eris
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
-        Array(const std::initializer<std::initializer_list<T>> &lst);
+        Array(const std::initializer_list<std::initializer_list<T>> &lst);
 
         //! Copy constructor.
         Array(const Array &other);
@@ -65,13 +66,13 @@ namespace Eris
         void set(const Array &other);
 
         //! Copies given initializer list \p lst to this array.
-        void set(const std::initializer<std::initializer_list<T>> &lst);
+        void set(const std::initializer_list<std::initializer_list<T>> &lst);
 
         //! Clears the array and resizes to zero.
         void clear();
 
         //! Resizes the array with \p size and fill the new element with \p initVal.
-        void resize(size_t size, const T &initVal = T());
+        void resize(const  Size2& size, const T &initVal = T());
 
         //! Resizes the array with size \p width x \p height and fill the new
         //! element with \p initVal.
@@ -263,7 +264,7 @@ namespace Eris
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
-        Array &operator=(const std::<std::initializer_list<std::initializer_list<T>> &lst);
+        Array &operator=(const std::initializer_list<std::initializer_list<T>> &lst);
 
         //! Casts to array accessor.
         operator ArrayAccessor2<T>();

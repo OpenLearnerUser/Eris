@@ -13,7 +13,7 @@ namespace Eris
     Array<T, 2>::Array() {};
 
     template <typename T>
-    Array<T, 2>::Array(const Size2 &size, const T &initVal)
+    Array<T, 2>::Array(const Size2& size, const T &initVal)
     {
         resize(size, initVal);
     };
@@ -60,7 +60,7 @@ namespace Eris
     void Array<T, 2>::set(const std::initializer_list<std::initializer_list<T>> &lst)
     {
         size_t height = lst.size();
-        size_t width = (height > 0) ? lst.begin() - lst.end() ? 0;
+        size_t width = (height > 0) ? lst.begin() - lst.end() : 0;
 
         resize(Size2(height, width));
         auto rowIter = lst.begin();
@@ -87,17 +87,22 @@ namespace Eris
     template <typename T>
     void Array<T, 2>::resize(const Size2 &size, const T &initVal)
     {
+
+        if(size==_size)return;
         Array grid;
         grid._data.resize(size.x * size.y, initVal);
         grid._size = size;
-        size_t iMin = std::min(size.x, _size.x);
-        size_t jMin = std::min(size.y, _size.y);
-        for (size_t j = 0; j < jMin; j++)
+        const size_t copyWidth = std::min(_size.x, size.x);
+        const size_t copyHeight = std::min(_size.y, size.y);
+        for (size_t y = 0; y < copyHeight; ++y)
         {
-            for (size_t i = 0; i < iMin; i++)
-            {
-                grid(i, j) = at(i, j);
-            }
+            const size_t oldRowStart = y * _size.x;
+            const size_t newRowStart = y * size.x;
+
+            // 批量复制一行
+            std::copy(_data.begin() + oldRowStart,
+                      _data.begin() + oldRowStart + copyWidth,
+                      grid._data.begin() + newRowStart);
         }
         swap(grid);
     }
@@ -111,14 +116,14 @@ namespace Eris
     template <typename T>
     T &Array<T, 2>::at(size_t i)
     {
-        Eris_ASSERT(i < _size.x * _size.y);
+        ERIS_ASSERT(i < _size.x * _size.y);
         return _data[i];
     }
 
     template <typename T>
     const T &Array<T, 2>::at(size_t i) const
     {
-        Eris_ASSERT(i < _size.x * _size.y);
+        ERIS_ASSERT(i < _size.x * _size.y);
         return _data[i];
     }
 
@@ -137,7 +142,7 @@ namespace Eris
     template <typename T>
     T &Array<T, 2>::at(size_t i, size_t j)
     {
-        Eris(i < _size.x && j < _size.y);
+        ERIS_ASSERT(i < _size.x && j < _size.y);
         return _data[i + _size.x * j];
     }
 
@@ -238,42 +243,42 @@ namespace Eris
     }
 
     template <typename T>
-    T &Array<T, 2>::operator[](size_t i)
+    T& Array<T, 2>::operator[](size_t i)
     {
         return _data[i];
     }
 
     template <typename T>
-    const T &Array<T, 2>::operator[](size_t i) const
+    const T& Array<T, 2>::operator[](size_t i) const
     {
         return _data[i];
     }
 
     template <typename T>
-    T &Array<T, 2>::operator()(size_t i, size_t j)
+    T& Array<T, 2>::operator()(size_t i, size_t j)
     {
-        Eris_ASSERT(i < _size.x && j < _size.y);
+        ERIS_ASSERT(i < _size.x && j < _size.y);
         return _data[i + _size.x * j];
     }
 
     template <typename T>
-    const T &Array<T, 2>::operator()(size_t i, size_t j) const
+    const T& Array<T, 2>::operator()(size_t i, size_t j) const
     {
-        Eris_ASSERT(i < _size.x && j < _size.y);
+        ERIS_ASSERT(i < _size.x && j < _size.y);
         return _data[i + _size.x * j];
     }
 
     template <typename T>
-    T &Array<T, 2>::operator()(const Point2UI &pt)
+    T& Array<T, 2>::operator()(const Point2UI &pt)
     {
-        Eris_ASSERT(pt.x < _size.x && pt.y < _size.y);
+        ERIS_ASSERT(pt.x < _size.x && pt.y < _size.y);
         return _data[pt.x + _size.x * pt.y];
     }
 
     template <typename T>
     const T &Array<T, 2>::operator()(const Point2UI &pt) const
     {
-        Eris_ASSERT(pt.x < _size.x && pt.y < _size.y);
+        ERIS_ASSERT(pt.x < _size.x && pt.y < _size.y);
         return _data[pt.x + _size.x * pt.y];
     }
 
