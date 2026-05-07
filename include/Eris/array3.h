@@ -3,15 +3,15 @@
 #include <vector>
 
 #include <Eris/array.h>
-#include <Eris/ArrayAccessor2.h>
-#include <Eris/size2.h>
-#include <Eris/point2.h>
+#include <Eris/ArrayAccessor3.h>
+#include <Eris/size3.h>
+#include <Eris/point3.h>
 
 namespace Eris
 {
 
     template <typename T>
-    class Array<T, 2> final
+    class Array<T, 3> final
     {
     public:
         typedef std::vector<T> ContainerType;
@@ -24,14 +24,14 @@ namespace Eris
         //! Constructs 1-D array with given \p size and fill it with \p initVal.
         //! \param size Initial size of the array.
         //! \param initVal Initial value of each array element.
-        explicit Array(const Size2& size, const T &initVal = T());
+        explicit Array(const Size3& size, const T &initVal = T());
 
         //! Constructs 2-D array with size \p width x \p height and fill it with
         //! \p initVal.
         //! \param width Initial width of the array.
         //! \param height Initial height of the array.
         //! \param initVal Initial value of each array element.
-        Array(size_t width, size_t height, const T &initVal = T());
+        Array(size_t width, size_t height,size_t depth, const T &initVal = T());
 
         //!
         //! \brief Constructs 2-D array with given initializer list \p lst.
@@ -51,7 +51,7 @@ namespace Eris
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
-        Array(const std::initializer_list<std::initializer_list<T>> &lst);
+        Array(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst);
 
         //! Copy constructor.
         Array(const Array &other);
@@ -66,17 +66,17 @@ namespace Eris
         void set(const Array &other);
 
         //! Copies given initializer list \p lst to this array.
-        void set(const std::initializer_list<std::initializer_list<T>> &lst);
+        void set(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst);
 
         //! Clears the array and resizes to zero.
         void clear();
 
         //! Resizes the array with \p size and fill the new element with \p initVal.
-        void resize(const  Size2& size, const T &initVal = T());
+        void resize(const  Size3& size, const T &initVal = T());
 
         //! Resizes the array with size \p width x \p height and fill the new
         //! element with \p initVal.
-        void resize(size_t width, size_t height, const T &initVal = T());
+        void resize(size_t width, size_t height,size_t depth, const T &initVal = T());
 
         ///!
         //! \brief Returns the reference to the i-th element.
@@ -97,23 +97,25 @@ namespace Eris
         const T &at(size_t i) const;
 
         //! Returns the reference to the element at (pt.x, pt.y).
-        T &at(const Point2UI &pt);
+        T &at(const Point3UI &pt);
 
         //! Returns the const reference to the element at (pt.x, pt.y).
-        const T &at(const Point2UI &pt) const;
+        const T &at(const Point3UI &pt) const;
 
         //! Returns the reference to the element at (x, y).
-        T &at(size_t x, size_t y);
+        T &at(size_t x, size_t y,size_t z);
 
         //! Returns the const reference to the element at (x, y).
-        const T &at(size_t x, size_t y) const;
+        const T &at(size_t x, size_t y,size_t z) const;
 
         //! Returns size of the array.
-        Size2 size() const;
+        Size3 size() const;
 
         size_t width() const;
 
         size_t height() const;
+
+        size_t depth() const;
 
         //! Returns the raw pointer to the array data.
         T *data();
@@ -134,10 +136,10 @@ namespace Eris
         ConstIterator end() const;
 
         //! Returns the array accessor.
-        ArrayAccessor2<T> accessor();
+        ArrayAccessor3<T> accessor();
 
         //! Returns the const array accessor.
-        ConstArrayAccessor2<T> constAccessor() const;
+        ConstArrayAccessor3<T> constAccessor() const;
 
         //! Swaps the content of the array with \p other array.
         void swap(Array &other);
@@ -226,16 +228,16 @@ namespace Eris
         const T &operator[](size_t i) const;
 
         //! Returns the reference to the element at (pt.x, pt.y).
-        T &operator()(const Point2UI &pt);
+        T &operator()(const Point3UI &pt);
 
         //! Returns the const reference to the element at (pt.x, pt.y).
-        const T &operator()(const Point2UI &pt) const;
+        const T &operator()(const Point3UI &pt) const;
 
         //! Returns the reference to the element at (x, y).
-        T &operator()(const size_t x, const size_t y);
+        T &operator()(const size_t x, const size_t y,const size_t z);
 
         //! Returns the const reference to the element at (pt.x, pt.y).
-        const T &operator()(const size_t x, const size_t y) const;
+        const T &operator()(const size_t x, const size_t y,const size_t z) const;
 
         //! Sets entire array with given \p value.
         Array &operator=(const T &other);
@@ -264,23 +266,23 @@ namespace Eris
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
-        Array &operator=(const std::initializer_list<std::initializer_list<T>> &lst);
+        Array &operator=(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst);
 
         //! Casts to array accessor.
-        operator ArrayAccessor2<T>();
+        operator ArrayAccessor3<T>();
 
         //! Casts to const array accessor.
-        operator ConstArrayAccessor2<T>() const;
+        operator ConstArrayAccessor3<T>() const;
 
     private:
 
-        Size2 _size;
+        Size3 _size;
         ContainerType _data;
     };
 
     template <typename T>
-    using Array2 = Array<T, 2>;
+    using Array3 = Array<T, 3>;
 
 }
 
-#include "Eris/details/array2-inl.h"
+#include "Eris/details/array3-inl.h"

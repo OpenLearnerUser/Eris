@@ -196,15 +196,15 @@ namespace Eris
         return _data.cend();
     }
     template <typename T>
-    ArrayAccessor1<T> Array<T, 2>::accessor()
+    ArrayAccessor2<T> Array<T, 2>::accessor()
     {
-        return ArrayAccessor(size(), data());
+        return ArrayAccessor2<T>(size(), data());
     }
 
     template <typename T>
-    ConstArrayAccessor1<T> Array<T, 2>::constAccessor() const
+    ConstArrayAccessor2<T> Array<T, 2>::constAccessor() const
     {
-        return ConstArrayAccessor1<T>(size(), data());
+        return ConstArrayAccessor2<T>(size(), data());
     }
 
     template <typename T>
@@ -306,13 +306,13 @@ namespace Eris
     }
 
     template <typename T>
-    Array<T, 2>::operator ArrayAccessor1<T>()
+    Array<T, 2>::operator ArrayAccessor2<T>()
     {
         return accessor();
     }
 
     template <typename T>
-    Array<T, 2>::operator ConstArrayAccessor1<T>() const
+    Array<T, 2>::operator ConstArrayAccessor2<T>() const
     {
         return constAccessor();
     }

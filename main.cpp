@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Eris/array1.h>
 #include <Eris/array2.h>
+#include <Eris/array3.h>
 #include <Eris/parallel.h>
 #include <Eris/point3.h>
 #include <Eris/size3.h>
