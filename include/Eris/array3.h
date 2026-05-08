@@ -18,36 +18,37 @@ namespace Eris
         typedef typename std::vector<T>::iterator Iterator;
         typedef typename std::vector<T>::const_iterator ConstIterator;
 
-        //! Constructs zero-sized 1-D array.
+        //! Constructs zero-sized 3-D array.
         Array();
 
-        //! Constructs 1-D array with given \p size and fill it with \p initVal.
+        //! Constructs 3-D array with given \p size and fill it with \p initVal.
         //! \param size Initial size of the array.
         //! \param initVal Initial value of each array element.
         explicit Array(const Size3& size, const T &initVal = T());
 
-        //! Constructs 2-D array with size \p width x \p height and fill it with
+        //! Constructs 3-D array with size \p width x \p height x \p depth and fill it with
         //! \p initVal.
         //! \param width Initial width of the array.
         //! \param height Initial height of the array.
+        //! \param depth Initial depth of the array.
         //! \param initVal Initial value of each array element.
-        Array(size_t width, size_t height,size_t depth, const T &initVal = T());
+        Array(size_t width, size_t height, size_t depth, const T &initVal = T());
 
         //!
-        //! \brief Constructs 2-D array with given initializer list \p lst.
+        //! \brief Constructs 3-D array with given initializer list \p lst.
         //!
-        //! This constructor will build 2-D array with given initializer list \p lst
+        //! This constructor will build 3-D array with given initializer list \p lst
         //! such as
         //!
         //! \code{.cpp}
-        //! Array<int, 2> arr = {
-        //!     {1, 2, 4},
-        //!     {9, 3, 5}
+        //! Array<int, 3> arr = {
+        //!     {{1, 2, 4}, {9, 3, 5}},
+        //!     {{3, 1, 7}, {4, 8, 6}}
         //! };
         //! \endcode
         //!
-        //! Note the initializer also has 2-D structure. The code above will
-        //! construct 3 x 2 array.
+        //! Note the initializer also has 3-D structure. The code above will
+        //! construct 3 x 2 x 2 array.
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
@@ -74,16 +75,16 @@ namespace Eris
         //! Resizes the array with \p size and fill the new element with \p initVal.
         void resize(const  Size3& size, const T &initVal = T());
 
-        //! Resizes the array with size \p width x \p height and fill the new
+        //! Resizes the array with size \p width x \p height x \p depth and fill the new
         //! element with \p initVal.
-        void resize(size_t width, size_t height,size_t depth, const T &initVal = T());
+        void resize(size_t width, size_t height, size_t depth, const T &initVal = T());
 
         ///!
         //! \brief Returns the reference to the i-th element.
         //!
         //! This function returns the reference to the i-th element of the array
         //! where i is the index of linearly mapped elements such that
-        //! i = x + (width * y) (x and y are the 2-D coordinates of the element).
+        //! i = x + width * (y + height * z) (x, y and z are the 3-D coordinates of the element).
         //!
         T &at(size_t i);
 
@@ -92,21 +93,21 @@ namespace Eris
         //!
         //! This function returns the const reference to the i-th element of the
         //! array where i is the index of linearly mapped elements such that
-        //! i = x + (width * y) (x and y are the 2-D coordinates of the element).
+        //! i = x + width * (y + height * z) (x, y and z are the 3-D coordinates of the element).
         //!
         const T &at(size_t i) const;
 
-        //! Returns the reference to the element at (pt.x, pt.y).
+        //! Returns the reference to the element at (pt.x, pt.y, pt.z).
         T &at(const Point3UI &pt);
 
-        //! Returns the const reference to the element at (pt.x, pt.y).
+        //! Returns the const reference to the element at (pt.x, pt.y, pt.z).
         const T &at(const Point3UI &pt) const;
 
-        //! Returns the reference to the element at (x, y).
-        T &at(size_t x, size_t y,size_t z);
+        //! Returns the reference to the element at (x, y, z).
+        T &at(size_t x, size_t y, size_t z);
 
-        //! Returns the const reference to the element at (x, y).
-        const T &at(size_t x, size_t y,size_t z) const;
+        //! Returns the const reference to the element at (x, y, z).
+        const T &at(size_t x, size_t y, size_t z) const;
 
         //! Returns size of the array.
         Size3 size() const;
@@ -153,7 +154,7 @@ namespace Eris
         //! the array. Below is the sample usage:
         //!
         //! \code{.cpp}
-        //! Array<int, 1> array(10, 4);
+        //! Array<int, 3> array(3, 3, 3, 4);
         //! array.forEach([](int elem) {
         //!     printf("%d\n", elem);
         //! });
@@ -170,7 +171,7 @@ namespace Eris
         //! the size of the array. Below is the sample usage:
         //!
         //! \code{.cpp}
-        //! Array<int, 1> array(10, 4);
+        //! Array<int, 3> array(3, 3, 3, 4);
         //! array.forEachIndex([&](size_t i) {
         //!     array[i] = 4.f * i + 1.5f;
         //! });
@@ -189,7 +190,7 @@ namespace Eris
         //! Below is the sample usage:
         //!
         //! \code{.cpp}
-        //! Array<int, 1> array(1000, 4);
+        //! Array<int, 3> array(10, 10, 10, 4);
         //! array.parallelForEach([](int& elem) {
         //!     elem *= 2;
         //! });
@@ -212,7 +213,7 @@ namespace Eris
         //! Below is the sample usage:
         //!
         //! \code{.cpp}
-        //! Array<int, 1> array(1000, 4);
+        //! Array<int, 3> array(10, 10, 10, 4);
         //! array.parallelForEachIndex([](size_t i) {
         //!     array[i] *= 2;
         //! });
@@ -227,17 +228,17 @@ namespace Eris
         //! Returns the const reference to i-th element.
         const T &operator[](size_t i) const;
 
-        //! Returns the reference to the element at (pt.x, pt.y).
+        //! Returns the reference to the element at (pt.x, pt.y, pt.z).
         T &operator()(const Point3UI &pt);
 
-        //! Returns the const reference to the element at (pt.x, pt.y).
+        //! Returns the const reference to the element at (pt.x, pt.y, pt.z).
         const T &operator()(const Point3UI &pt) const;
 
-        //! Returns the reference to the element at (x, y).
-        T &operator()(const size_t x, const size_t y,const size_t z);
+        //! Returns the reference to the element at (x, y, z).
+        T &operator()(const size_t x, const size_t y, const size_t z);
 
-        //! Returns the const reference to the element at (pt.x, pt.y).
-        const T &operator()(const size_t x, const size_t y,const size_t z) const;
+        //! Returns the const reference to the element at (x, y, z).
+        const T &operator()(const size_t x, const size_t y, const size_t z) const;
 
         //! Sets entire array with given \p value.
         Array &operator=(const T &other);
@@ -254,15 +255,15 @@ namespace Eris
         //! This function copies given initializer list \p lst to the array such as
         //!
         //! \code{.cpp}
-        //! Array<int, 2> arr;
+        //! Array<int, 3> arr;
         //! arr = {
-        //!     {1, 2, 4},
-        //!     {9, 3, 5}
+        //!     {{1, 2, 4}, {9, 3, 5}},
+        //!     {{3, 1, 7}, {4, 8, 6}}
         //! };
         //! \endcode
         //!
-        //! Note the initializer also has 2-D structure. The code above will
-        //! build 3 x 2 array.
+        //! Note the initializer also has 3-D structure. The code above will
+        //! build 3 x 2 x 2 array.
         //!
         //! \param lst Initializer list that should be copy to the new array.
         //!
