@@ -6,7 +6,8 @@
             "intelliSenseMode": "windows-gcc-x64",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "compilerPath": "D:/mingw64/bin/g++.exe",
+            //"compilerPath": "D:/MinGW/mingw64/bin/g++.exe",
+            "compilerPath": "D:/MinGW/mingw64/bin/g++.exe",
             "includePath": [
                 "${workspaceFolder}/include"
             ]

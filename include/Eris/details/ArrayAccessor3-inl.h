@@ -304,7 +304,7 @@ size_t ConstArrayAccessor<T, 3>::index(const Point3UI &pt) const {
 
 template <typename T>
 size_t ConstArrayAccessor<T, 3>::index(size_t i, size_t j,size_t k) const {
-    return i + _size.x(j  +k * _size.y);
+    return i + _size.x *(j  +k * _size.y);
 }
 
 template <typename T>

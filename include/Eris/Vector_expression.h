@@ -1,4 +1,5 @@
 #pragma once
+#include "Eris/functors.h"
 
 namespace Eris
 {
