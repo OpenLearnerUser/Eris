@@ -42,7 +42,7 @@ namespace Eris{
             Vector(const VectorExpression<T,E>& others);
 
             //! Copy constructor.
-            void copy(const Vector& others);
+            void Vector(const Vector &others);
 
             // MARK: Basic setters
             //! Set vector instance with initializer list.
