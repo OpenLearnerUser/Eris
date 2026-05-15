@@ -6,6 +6,7 @@
 #include <Eris/point3.h>
 #include <Eris/size3.h>
 #include <Eris/size2.h>
+#include<Eris/vector_n.h>
 #include <vector>
 #include <chrono>
 #include <thread>

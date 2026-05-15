@@ -1,7 +1,7 @@
 #pragma once
 #include <Eris/macro.h>
 #include <Eris/math_utils.h>
-#include <Eris/vector.h>
+
 
 namespace Eris{
 
