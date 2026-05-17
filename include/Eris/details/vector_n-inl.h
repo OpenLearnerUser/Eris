@@ -191,9 +191,9 @@ namespace Eris{
                               {
                               T result = init;
                               for (size_t i = start; i < end; ++i) {
-                                  result = jet::absmin(result, _elements[i]);
+                                  result = Eris::absmin(result, _elements[i]);
                               }
-                              return result; }, jet::absmin<T>);
+                              return result; }, Eris::absmin<T>);
     }
 
     template <typename T>
@@ -202,9 +202,9 @@ namespace Eris{
                               {
                               T result = init;
                               for (size_t i = start; i < end; ++i) {
-                                  result = jet::absmax(result, _elements[i]);
+                                  result = Eris::absmax(result, _elements[i]);
                               }
-                              return result; }, jet::absmax<T>);
+                              return result; }, Eris::absmax<T>);
     }
 
     template <typename T>

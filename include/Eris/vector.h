@@ -35,16 +35,19 @@ namespace Eris{
             Vector(const T& v);
             //! Constructs vector instance with initializer list.
             template<typename U>
-            Vector(const std::initializer_list<T>& lst);
+            Vector(const std::initializer_list<U>& lst);
 
             //! Constructs vector with expression template.
             template<typename E>
             Vector(const VectorExpression<T,E>& others);
 
             //! Copy constructor.
-            void Vector(const Vector &others);
+            Vector(const Vector &other);
 
             // MARK: Basic setters
+            //! Sets all elements to \p s.
+            void set(const T &s);
+
             //! Set vector instance with initializer list.
             template<typename U>
             void set(const std::initializer_list<U>& lst);
@@ -144,7 +147,7 @@ namespace Eris{
             bool isEqual(const E& other)const;
             //! Returns true if \p other is similar to this vector.
             template<typename E>
-            bool isSimilar(const E& other,T epsilon=std::numeric_limits<T>::epsilin())const;
+            bool isSimilar(const E& other,T epsilon=std::numeric_limits<T>::epsilon())const;
 
             // MARK: Binary operations: new instance = this (+) v
 
@@ -179,14 +182,14 @@ namespace Eris{
             // MARK: Binary operations: new instance = v (+) this
 
             //! Computes (s, s, ... , s) - this.
-            VectorScalarRSub<T,Vector> rsub(const T& s);
+            VectorScalarRSub<T,Vector> rsub(const T& s) const;
 
             //! Computes v - this.
             template <typename E>
             VectorSub<T, Vector, E> rsub(const E &v) const;
 
             //! Computes (s, s, ... , s) / this.
-            VectorScalarRDiv<T, Vector> rdiv(const T &s);
+            VectorScalarRDiv<T, Vector> rdiv(const T &s) const;
 
             //! Computes v / this.
             template <typename E>
@@ -265,7 +268,7 @@ namespace Eris{
             const T &operator[](size_t i) const;
 
             //! Returns the reference to the \p i -th element.
-            T &operator[](size_t);
+            T &operator[](size_t i);
 
             //! Set vector instance with initializer list.
             template <typename U>
@@ -320,7 +323,13 @@ namespace Eris{
             void setAt(size_t i, T v);
     };
 
-//! Returns the type of the value.
+    template <typename T>
+    struct ScalarType
+    {
+        typedef T value;
+    };
+
+    //! Returns the type of the value.
     template <typename T, size_t N>
     struct ScalarType<Vector<T, N>>
     {
@@ -328,4 +337,4 @@ namespace Eris{
     };
 }
 
-#include "detail/vector-inl.h"
+#include "details/vector-inl.h"

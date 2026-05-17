@@ -7,6 +7,8 @@
 #include <Eris/size3.h>
 #include <Eris/size2.h>
 #include<Eris/vector_n.h>
+#include<Eris/vector3.h>
+#include<Eris/vector4.h>
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -152,6 +154,13 @@ int main(int argc, char **argv)
     // std::cout << "\n所有测试完成！" << std::endl;
 
     Point3<double> a;
+    Vector3F b={1.0f,2.0f,3.0f};
+    Vector3F c={1.0f,2.0f,4.0f};
+
+    auto d=b+c;
+
+    std::cout<<d[0]<<", "<<d[1]<<", "<<d[2]<<std::endl;
+
     a={1,2,4};
     std::cout<<"a="<<a[1]<<std::endl;
     return 0;

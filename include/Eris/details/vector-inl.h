@@ -50,7 +50,7 @@ namespace Eris{
     template <typename U>
     void Vector<T, N>::set(const std::initializer_list<U> &lst)
     {
-        JET_ASSERT(lst.size() >= N);
+        ERIS_ASSERT(lst.size() >= N);
 
         size_t i = 0;
         for (const auto &inputElem : lst)
@@ -64,7 +64,7 @@ namespace Eris{
     template <typename E>
     void Vector<T, N>::set(const VectorExpression<T, E> &other)
     {
-        JET_ASSERT(size() == other.size());
+        ERIS_ASSERT(size() == other.size());
 
         // Parallel evaluation of the expression
         const E &expression = other();
@@ -202,7 +202,7 @@ namespace Eris{
         T ret = _elements.front();
         for (T val : _elements)
         {
-            ret = jet::absmin(ret, val);
+            ret = Eris::absmin(ret, val);
         }
         return ret;
     }
@@ -213,7 +213,7 @@ namespace Eris{
         T ret = _elements.front();
         for (T val : _elements)
         {
-            ret = jet::absmax(ret, val);
+            ret = Eris::absmax(ret, val);
         }
         return ret;
     }
@@ -264,7 +264,7 @@ namespace Eris{
     template <typename E>
     T Vector<T, N>::distanceSquaredTo(const E &other) const
     {
-        JET_ASSERT(size() == other.size());
+        ERIS_ASSERT(size() == other.size());
 
         T ret = 0;
         for (size_t i = 0; i < N; ++i)
@@ -377,7 +377,7 @@ namespace Eris{
     template <typename E>
     T Vector<T, N>::dot(const E &v) const
     {
-        JET_ASSERT(size() == v.size());
+        ERIS_ASSERT(size() == v.size());
 
         T ret = 0;
         for (size_t i = 0; i < N; ++i)

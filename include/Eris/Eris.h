@@ -27,4 +27,7 @@
 #include <Eris/size2.h>
 #include <Eris/size3.h>
 #include <Eris/vector.h>
+#include <Eris/vector2.h>
+#include <Eris/vector3.h>
+#include <Eris/vector4.h>
 #include <Eris/vector_n.h>
