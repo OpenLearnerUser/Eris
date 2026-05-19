@@ -18,7 +18,7 @@ namespace Eris
     class VectorExpression
     {
     public:
-        size_t size();
+        size_t size() const;
 
         const E &operator()() const;
     };
@@ -39,14 +39,14 @@ namespace Eris
     class VectorUnaryOp : public VectorExpression<T, VectorUnaryOp<T, E, Op>>
     {
     public:
-        VectorUnaryOp(const Op &op_);
+        VectorUnaryOp(const E &e_);
 
-        size_t size();
+        size_t size() const;
 
         T operator[](size_t i) const;
 
     private:
-        const E &e;
+        const E &_e;
         Op _op;
     };
 
@@ -75,7 +75,7 @@ namespace Eris
     public:
         VectorBinaryOp(const E1 &e1, const E2 &e2);
         //! Size of the vector.
-        size_t size();
+        size_t size() const;
         //! Returns vector element at i.
         T operator[](size_t i) const;
 
@@ -211,3 +211,5 @@ namespace Eris
                                    const VectorExpression<T, E2> &b);
 
 } // namespace Eris
+
+#include "details/vector_expression-inl.h"
