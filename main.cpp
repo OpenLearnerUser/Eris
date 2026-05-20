@@ -9,6 +9,7 @@
 #include<Eris/vector_n.h>
 #include<Eris/vector3.h>
 #include<Eris/vector4.h>
+#include<Eris/matrix_expression.h>
 #include <vector>
 #include <chrono>
 #include <thread>

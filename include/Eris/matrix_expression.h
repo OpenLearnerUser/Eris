@@ -1,5 +1,8 @@
 #pragma once
+#include <Eris/macro.h>
 #include "Eris/functors.h"
+#include <Eris/size2.h>
+#include <Eris/vector_expression.h>
 
 namespace Eris
 {
@@ -19,7 +22,7 @@ namespace Eris
     {
 
     public:
-        size_t size() const;
+        Size2 size() const;
         size_t rows() const;
         size_t cols() const;
         const E &operator()() const;
@@ -38,7 +41,7 @@ namespace Eris
     public:
         MatrixConstant(const size_t &m, size_t n, const T &c);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         size_t rows() const;
         size_t cols() const;
         T operator()(size_t i, size_t j) const;
@@ -46,7 +49,7 @@ namespace Eris
     public:
         size_t _m;
         size_t _n;
-        T _c
+        T _c;
     };
 
     //!
@@ -62,7 +65,7 @@ namespace Eris
     public:
         MatrixIdentity(const size_t &m);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         size_t rows() const;
         size_t cols() const;
         T operator()(size_t i, size_t j) const;
@@ -84,12 +87,12 @@ namespace Eris
     //! \tparam Op  Unary operation.
     //!
     template <typename T, typename E, typename Op>
-    class MatrixUnaryOp : public MatrixExpression<T, MatrixIdentity<T, E, Op>>
+    class MatrixUnaryOp : public MatrixExpression<T, MatrixUnaryOp<T, E, Op>>
     {
     public:
         MatrixUnaryOp(const E &u);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         size_t rows() const;
         size_t cols() const;
         T operator()(size_t i, size_t j) const;
@@ -114,7 +117,7 @@ namespace Eris
     public:
         MatrixDiagonal(const E &u, bool isDiag = true);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         //! Number of rows.
         size_t rows() const;
         //! Number of columns.
@@ -141,7 +144,7 @@ namespace Eris
     public:
         MatrixTriangular(const E &u_, bool isUpper = true, bool isStrict = false);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         //! Number of rows.
         size_t rows() const;
         //! Number of columns.
@@ -183,9 +186,9 @@ namespace Eris
     class MatrixBinaryOp : public MatrixExpression<T, MatrixBinaryOp<T, E1, E2, Op>>
     {
     public:
-        MatrixBinaryOp(const E1 &u1, const E2 &u2);
+        MatrixBinaryOp(const E1 &u1_, const E2 &u2_);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         //! Number of rows.
         size_t rows() const;
         //! Number of columns.
@@ -210,12 +213,12 @@ namespace Eris
     //! \tparam Op  Binary operation.
     //!
     template <typename T, typename E, typename Op>
-    class MatrixScalarBinaryOp : public MatrixExpression<T, MatrixBinaryOp<T, E, Op>>
+    class MatrixScalarBinaryOp : public MatrixExpression<T, MatrixScalarBinaryOp<T, E, Op>>
     {
     public:
-        MatrixScalarBinaryOp(const E &u);
+        MatrixScalarBinaryOp(const E &u, const T &v);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         //! Number of rows.
         size_t rows() const;
         //! Number of columns.
@@ -224,6 +227,7 @@ namespace Eris
 
     private:
         const E &_u;
+        T _v;
         Op _op;
     };
 
@@ -239,13 +243,13 @@ namespace Eris
     //! \tparam VE  Vector expression type.
     //!
     template <typename T, typename MV, typename VE>
-    class MatrixVectorMul : public MatrixExpression<T, MatrixBinaryOp<T, MV, VE>>
+    class MatrixVectorMul : public VectorExpression<T, MatrixVectorMul<T, MV, VE>>
     {
     public:
         MatrixVectorMul(const MV &m, const VE &v);
         //! Size of the matrix.
         size_t size() const;
-        T operator()(size_t i, size_t j) const;
+        T operator[](size_t i) const;
 
     private:
         const MV &_m;
@@ -269,7 +273,7 @@ namespace Eris
     public:
         MatrixMul(const E1 &u1, const E2 &u2);
         //! Size of the matrix.
-        size_t size() const;
+        Size2 size() const;
         //! Number of rows.
         size_t rows() const;
         //! Number of columns.
@@ -293,7 +297,7 @@ namespace Eris
     //! \brief Matrix expression for scalar addition.
     //!
     template <typename T, typename E>
-    using MatrixSclarAdd = MatrixScalarBinaryOp<T, E, std::plus<T>>;
+    using MatrixScalarAdd = MatrixScalarBinaryOp<T, E, std::plus<T>>;
 
     //!
     //! \brief Matrix expression for subtraction.
@@ -305,33 +309,33 @@ namespace Eris
     //! \brief Matrix expression for scalar subtraction.
     //!
     template <typename T, typename E>
-    using MatrixSclarSub = MatrixScalarBinaryOp<T, E, std::minus<T>>;
+    using MatrixScalarSub = MatrixScalarBinaryOp<T, E, std::minus<T>>;
 
     template <typename T, typename E>
-    using MatrixSclarRSub = MatrixScalarBinaryOp<T, E, RMinus<T>>;
+    using MatrixScalarRSub = MatrixScalarBinaryOp<T, E, RMinus<T>>;
 
     //!
     //! \brief Matrix expression for scalar multiplication .
     //!
     template <typename T, typename E>
-    using MatrixSclarMul = MatrixScalarBinaryOp<T, E, std::multiplies<T>>;
+    using MatrixScalarMul = MatrixScalarBinaryOp<T, E, std::multiplies<T>>;
 
     //!
     //! \brief Matrix expression for scalar division .
     //!
     template <typename T, typename E>
-    using MatrixSclarDiv = MatrixScalarBinaryOp<T, E, std::divides<T>>;
+    using MatrixScalarDiv = MatrixScalarBinaryOp<T, E, std::divides<T>>;
 
     //!
     //! \brief Matrix expression for scalar division .
     //!
     template <typename T, typename E>
-    using MatrixSclarRDiv = MatrixScalarBinaryOp<T, E, RDivides<T>>;
+    using MatrixScalarRDiv = MatrixScalarBinaryOp<T, E, RDivides<T>>;
 
     // MARK: Operator overloadings
 
     template <typename T, typename E>
-    MatrixSclarMul<T, E> operator-(const MatrixExpression<T, E> &u);
+    MatrixScalarMul<T, E> operator-(const MatrixExpression<T, E> &u);
 
     //! Returns a + b (element-size).
     template <typename T, typename E1, typename E2>
@@ -339,11 +343,11 @@ namespace Eris
 
     //! Returns a + b', where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarAdd<T, E> operator+(const MatrixExpression<T, E> &u, const T &a);
+    MatrixScalarAdd<T, E> operator+(const MatrixExpression<T, E> &u, const T &a);
 
     //! Returns a` + b, where every element of matrix b` is b.
     template <typename T, typename E>
-    MatrixSclarAdd<T, E> operator+(const T &a, const MatrixExpression<T, E> &u);
+    MatrixScalarAdd<T, E> operator+(const T &a, const MatrixExpression<T, E> &u);
 
     //! Returns a - b (element-size).
     template <typename T, typename E1, typename E2>
@@ -351,19 +355,19 @@ namespace Eris
 
     //! Returns a - b', where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarSub<T, E> operator-(const MatrixExpression<T, E> &u, const T &a);
+    MatrixScalarSub<T, E> operator-(const MatrixExpression<T, E> &u, const T &a);
 
     //! Returns a` - b, where every element of matrix b` is b.
     template <typename T, typename E>
-    MatrixSclarSub<T, E> operator-(const T &a, const MatrixExpression<T, E> &u);
+    MatrixScalarSub<T, E> operator-(const T &a, const MatrixExpression<T, E> &u);
 
     //! Returns a * b', where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarMul<T, E> operator*(const MatrixExpression<T, E> &u, const T &a);
+    MatrixScalarMul<T, E> operator*(const MatrixExpression<T, E> &u, const T &a);
 
     //! Returns a' * b, where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarMul<T, E> operator*(const T &a, const MatrixExpression<T, E> &u);
+    MatrixScalarMul<T, E> operator*(const T &a, const MatrixExpression<T, E> &u);
 
     template <typename T, typename ME, typename VE>
     MatrixVectorMul<T, ME, VE> operator*(const MatrixExpression<T, ME> &u, const VectorExpression<T, VE> &v);
@@ -374,11 +378,11 @@ namespace Eris
 
     //! Returns a / b', where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarDiv<T, E> operator/(const MatrixExpression<T, E> &u, const T &a);
+    MatrixScalarDiv<T, E> operator/(const MatrixExpression<T, E> &u, const T &a);
 
     //! Returns a' / b, where every element of matrix b' is b.
     template <typename T, typename E>
-    MatrixSclarDiv<T, E> operator/(const T &a, const MatrixExpression<T, E> &u);
+    MatrixScalarDiv<T, E> operator/(const T &a, const MatrixExpression<T, E> &u);
 
 }
 

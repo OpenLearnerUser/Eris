@@ -9,6 +9,12 @@ namespace Eris{
          constexpr U operator()(const T& a)const;
     };
 
+    template <typename T>
+    struct Cast
+    {
+        constexpr T operator()(const T &a) const { return a; }
+    };
+
     template<typename T>
     struct RMinus{
 
