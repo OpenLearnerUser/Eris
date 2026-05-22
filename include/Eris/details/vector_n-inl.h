@@ -136,7 +136,6 @@ namespace Eris{
     ConstArrayAccessor1<T> VectorN<T>::constAccessor() const{
         return ConstArrayAccessor1(size(), data());
     }
-    }
 
     template <typename T>
     T VectorN<T>::at(size_t i) const{
