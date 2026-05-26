@@ -23,6 +23,7 @@
 #include <Eris/matrix2x2.h>
 #include <Eris/matrix3x3.h>
 #include <Eris/matrix4x4.h>
+#include <Eris/matrix_csr.h>
 #include <Eris/matrix_expression.h>
 #include <Eris/parallel.h>
 #include <Eris/point.h>
