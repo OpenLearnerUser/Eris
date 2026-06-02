@@ -238,7 +238,7 @@ namespace Eris
                      Indextype beginIndexY, Indextype endIndexY,
                      const Function &function, ExecutionPolicy policy)
     {
-        paralleFor(beginIndexY, endIndexY, [&](Indextype j)
+        parallelFor(beginIndexY, endIndexY, [&](Indextype j)
                    {
                         for(Indextype i=beginIndexX;i<endIndexX;++i){
                             function(i,j);

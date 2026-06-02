@@ -62,6 +62,44 @@ namespace Eris
     //! \tparam     IndexType  Index type.
     //! \tparam     Function   Function type.
     //!
+    //!
+    //! \brief      Makes a for-loop from \p beginIndex \p to endIndex in
+    //!             parallel.
+    //!
+    //! This function makes a for-loop specified by begin and end indices in
+    //! parallel. The order of the visit is not guaranteed due to the nature of
+    //! parallel execution.
+    //!
+    //! \param[in]  beginIndex The begin index.
+    //! \param[in]  endIndex   The end index.
+    //! \param[in]  function   The function to call for each index.
+    //! \param[in]  policy     The execution policy (parallel or serial).
+    //!
+    //! \tparam     IndexType  Index type.
+    //! \tparam     Function   Function type.
+    //!
+    template <typename IndexType, typename Function>
+    void parallelFor(IndexType beginIndex, IndexType endIndex,
+                     const Function &function,
+                     ExecutionPolicy policy = ExecutionPolicy::KParallel);
+
+    //!
+    //! \brief      Makes a range-loop from \p beginIndex \p to endIndex in
+    //!             parallel.
+    //!
+    //! This function makes a for-loop specified by begin and end indices in
+    //! parallel. Unlike parallelFor function, the input function object takes range
+    //! instead of single index. The order of the visit is not guaranteed due to the
+    //! nature of parallel execution.
+    //!
+    //! \param[in]  beginIndex The begin index.
+    //! \param[in]  endIndex   The end index.
+    //! \param[in]  function   The function to call for each index range.
+    //! \param[in]  policy     The execution policy (parallel or serial).
+    //!
+    //! \tparam     IndexType  Index type.
+    //! \tparam     Function   Function type.
+    //!
     template <typename IndexType, typename Function>
     void parallelRangeFor(IndexType beginIndex, IndexType endIndex,
                           const Function &function,

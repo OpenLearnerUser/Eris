@@ -53,22 +53,23 @@ namespace Eris
     template <typename T>
     void Array<T, 2>::set(const Array &other)
     {
-        _data_resize(other._data.size());
+        _data.resize(other._data.size());
+        _size = other._size;
         std::copy(other._data.begin(), other._data.end(), this->_data.begin());
     }
     template <typename T>
     void Array<T, 2>::set(const std::initializer_list<std::initializer_list<T>> &lst)
     {
         size_t height = lst.size();
-        size_t width = (height > 0) ? lst.begin() - lst.end() : 0;
+        size_t width = (height > 0) ? lst.begin()->size() : 0;
 
-        resize(Size2(height, width));
+        resize(Size2(width, height));
         auto rowIter = lst.begin();
         for (size_t j = 0; j < height; ++j)
         {
             ERIS_ASSERT(width == rowIter->size());
             auto colIter = rowIter->begin();
-            for (size_t i = 0; j < width; j++)
+            for (size_t i = 0; i < width; ++i)
             {
                 (*this)(i, j) = *colIter;
                 ++colIter;

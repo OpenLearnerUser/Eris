@@ -138,7 +138,7 @@ void ArrayAccessor<T, 3>::forEachIndex(Callback func) const {
      for(size_t k = 0; k < _size.z; ++k)
         for (size_t j = 0; j < _size.y; ++j) {
             for (size_t i = 0; i < _size.x; ++i) {
-                func(at(i, j,k));
+                func(i, j, k);
         }
     }
 }
@@ -147,8 +147,8 @@ template <typename T>
 template <typename Callback>
 void ArrayAccessor<T, 3>::parallelForEach(Callback func) {
     parallelFor(
-        kZeroSize, _size.x, kZeroSize, _size.y,
-        [&](size_t i, size_t j,size_t k) { func(at(i, j,k)); });
+        kZeroSize, _size.x, kZeroSize, _size.y, kZeroSize, _size.z,
+        [&](size_t i, size_t j, size_t k) { func(at(i, j, k)); });
 }
 
 template <typename T>
@@ -286,7 +286,7 @@ void ConstArrayAccessor<T, 3>::forEachIndex(Callback func) const {
     for (size_t k = 0; k < _size.z; ++k)
         for (size_t j = 0; j < _size.y; ++j) {
             for (size_t i = 0; i < _size.x; ++i) {
-                func(at(i, j,k));
+                func(i, j, k);
         }
     }
 }

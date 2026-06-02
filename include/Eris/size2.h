@@ -223,3 +223,5 @@ namespace Eris
                 const Size2 &high);
 
 }
+
+#include "Eris/details/size2-inl.h"

@@ -239,4 +239,4 @@ namespace Eris
     
 }
 
-#include "Eris/details/point3-inl.h"
+#include "Eris/details/size3-inl.h"

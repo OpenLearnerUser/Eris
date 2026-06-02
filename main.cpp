@@ -40,7 +40,7 @@ void testParallelForWithVector() {
     std::cout << "\n测试1：并行赋值..." << std::endl;
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    paralleFor<size_t>(0, N, [&data,&heavy_task](size_t i) {
+   parallelFor<size_t>(0, N, [&data,&heavy_task](size_t i) {
         data[i] = heavy_task(i);
     }, ExecutionPolicy::KParallel);
     
@@ -53,7 +53,7 @@ void testParallelForWithVector() {
     std::vector<double> data2(N);
     start_time = std::chrono::high_resolution_clock::now();
     
-    paralleFor<size_t>(0, N, [&data2,&heavy_task](size_t i) {
+    parallelFor<size_t>(0, N, [&data2,&heavy_task](size_t i) {
         data2[i] = heavy_task(i);
     }, ExecutionPolicy::Kserial);
     
@@ -77,7 +77,7 @@ std::cout << "\n测试3：并行计算和..." << std::endl;
 std::atomic<double> atomic_sum(0.0);
 start_time = std::chrono::high_resolution_clock::now();
 
-paralleFor<size_t>(0, N, [&data, &atomic_sum](size_t i) {
+parallelFor<size_t>(0, N, [&data, &atomic_sum](size_t i) {
     // CAS 循环实现原子加法
     double expected = atomic_sum.load(std::memory_order_relaxed);
     while (!atomic_sum.compare_exchange_weak(expected, 
@@ -116,7 +116,7 @@ std::cout << "和: " << atomic_sum.load() << std::endl;
     
     // 测试4：边界测试
     std::cout << "\n测试4：边界测试（空范围）..." << std::endl;
-    paralleFor<size_t>(10, 5, [](size_t i) {
+    parallelFor<size_t>(10, 5, [](size_t i) {
         std::cout << "这不应该被执行" << std::endl;
     }, ExecutionPolicy::KParallel);
     std::cout << "空范围测试通过 ✓" << std::endl;
@@ -124,7 +124,7 @@ std::cout << "和: " << atomic_sum.load() << std::endl;
     // 测试5：小数据量
     std::cout << "\n测试5：小数据量测试..." << std::endl;
     std::vector<double> small_data(10);
-    paralleFor<size_t>(0, 10, [&small_data](size_t i) {
+    parallelFor<size_t>(0, 10, [&small_data](size_t i) {
         small_data[i] = static_cast<double>(i * i);
     }, ExecutionPolicy::KParallel);
     

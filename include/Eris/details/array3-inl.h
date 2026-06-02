@@ -53,7 +53,8 @@ namespace Eris
     template <typename T>
     void Array<T, 3>::set(const Array &other)
     {
-        _data_resize(other._data.size());
+        _data.resize(other._data.size());
+        _size = other._size;
         std::copy(other._data.begin(), other._data.end(), this->_data.begin());
     }
     template <typename T>
@@ -88,7 +89,7 @@ namespace Eris
     void Array<T, 3>::clear()
     {
         _data.clear();
-        _size = Size3(0, 0);
+        _size = Size3(0, 0, 0);
     }
 
     template <typename T>
@@ -168,6 +169,12 @@ namespace Eris
     size_t Array<T, 3>::height() const
     {
         return _size.y;
+    }
+
+    template <typename T>
+    size_t Array<T, 3>::depth() const
+    {
+        return _size.z;
     }
 
     template <typename T>
@@ -266,28 +273,28 @@ namespace Eris
     T &Array<T, 3>::operator()(size_t i, size_t j,size_t k)
     {
         ERIS_ASSERT(i < _size.x && j < _size.y && k < _size.z);
-        return _data[i + _size.x * (j+k*_size.z)];
+        return _data[i + _size.x * (j + _size.y * k)];
     }
 
     template <typename T>
     const T &Array<T, 3>::operator()(size_t i, size_t j, size_t k) const
     {
         ERIS_ASSERT(i < _size.x && j < _size.y && k < _size.z);
-        return _data[i + _size.x * (j+k * _size.z)];
+        return _data[i + _size.x * (j + _size.y * k)];
     }
 
     template <typename T>
     T &Array<T, 3>::operator()(const Point3UI &pt)
     {
         ERIS_ASSERT(pt.x < _size.x && pt.y < _size.y && pt.z < _size.z);
-        return _data[pt.x + _size.x * (pt.y+pt.z * _size.z)];
+        return _data[pt.x + _size.x * (pt.y + _size.y * pt.z)];
     }
 
     template <typename T>
     const T &Array<T, 3>::operator()(const Point3UI &pt) const
     {
         ERIS_ASSERT(pt.x < _size.x && pt.y < _size.y && pt.z < _size.z);
-        return _data[pt.x + _size.x * (pt.y+pt.z * _size.z)];
+        return _data[pt.x + _size.x * (pt.y + _size.y * pt.z)];
     }
 
     template <typename T>

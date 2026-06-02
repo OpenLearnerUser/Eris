@@ -97,6 +97,8 @@ Eris
 
 )
 
+add_subdirectory(src/tests/unit_tests)
+
 
 
 

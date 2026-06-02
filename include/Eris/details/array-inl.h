@@ -43,7 +43,7 @@ namespace Eris{
 
     template<typename T>
     void Array<T,1>::set(const Array& other){
-        _data_resize(other._data.size());
+        _data.resize(other._data.size());
         std::copy(other._data.begin(),other._data.end(),this->_data.begin());
     }
     template <typename T>
@@ -122,7 +122,7 @@ namespace Eris{
     }
     template<typename T>
     ArrayAccessor1<T> Array<T,1>::accessor(){
-        return ArrayAccessor(size(),data());
+        return ArrayAccessor<T, 1>(size(), data());
     }
 
     template <typename T>

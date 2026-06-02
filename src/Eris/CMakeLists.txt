@@ -19,7 +19,7 @@ set(Eris_head_gen_py ${CMAKE_SOURCE_DIR}/scripts/header_gen.py)
 # endif()
 
 add_custom_command(
-  COMMAND py ${Eris_head_gen_py}
+  COMMAND python ${Eris_head_gen_py}
   DEPENDS ${headers}
   OUTPUT ${root_dir}/include/Eris.h
 )

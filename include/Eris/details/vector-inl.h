@@ -15,11 +15,9 @@ namespace Eris{
     }
 
     template <typename T, size_t N>
-    template <typename... Params>
+    template <typename... Params, typename std::enable_if<sizeof...(Params) == N, int>::type>
     Vector<T, N>::Vector(Params... params)
     {
-        static_assert(sizeof...(params) == N, "Invalid number of parameters.");
-
         setAt(0, params...);
     }
 

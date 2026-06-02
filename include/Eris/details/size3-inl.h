@@ -17,7 +17,7 @@ namespace Eris
     }
 
     // Basic setters
-    void Size3::set(size_t s)
+    inline void Size3::set(size_t s)
     {
         x = s;
         y = s;
@@ -25,7 +25,7 @@ namespace Eris
     }
 
     
-    void Size3::set(size_t newX, size_t newY, size_t newZ)
+    inline void Size3::set(size_t newX, size_t newY, size_t newZ)
     {
         x = newX;
         y = newY;
@@ -34,7 +34,7 @@ namespace Eris
 
     
     template <typename U>
-    void Size3::set(const std::initializer_list<U> &lst)
+    inline void Size3::set(const std::initializer_list<U> &lst)
     {
         ERIS_ASSERT(lst.size() >= 3);
 
@@ -45,22 +45,22 @@ namespace Eris
     }
 
     
-    void Size3::set(const Size3 &v)
+    inline void Size3::set(const Size3 &v)
     {
-        x = y.x;
+        x = v.x;
         y = v.y;
         z = v.z;
     }
     
-    void Size3::set(const Size2 &sz, size_t z)
+    inline void Size3::set(const Size2 &sz, size_t z)
     {
-        x = sz.z;
+        x = sz.x;
         y = sz.y;
         z = z;
     }
 
     
-    void Size3::setZero()
+    inline void Size3::setZero()
     {
         x = y = z = 0;
     }
@@ -110,7 +110,7 @@ namespace Eris
     
     inline Size3 Size3::div(const Size3 &v) const
     {
-        return Size3(x / v.x, y / v.x, z / v.z);
+        return Size3(x / v.x, y / v.y, z / v.z);
     }
 
     // Binary operators: new instance = v (+) this
@@ -133,7 +133,7 @@ namespace Eris
     }
 
     
-    Size3 Size3::rdiv(const Size3 &v) const
+    inline Size3 Size3::rdiv(const Size3 &v) const
     {
         return Size3(v.x / x, v.y / y, v.z / z);
     }
@@ -176,7 +176,7 @@ namespace Eris
     {
         x *= v;
         y *= v;
-        z *= z;
+        z *= v;
     }
 
     
@@ -184,7 +184,7 @@ namespace Eris
     {
         x *= v.x;
         y *= v.y;
-        z *= z.y;
+        z *= v.z;
     }
 
     
@@ -263,15 +263,8 @@ namespace Eris
                    : ((std::fabs(y) < std::fabs(z)) ? 1 : 2);
     }
 
-    
-    template <typename U>
-    Point3<U> Size3::castTo() const
-    {
-        return Point2<U>(static_cast<U>(x), static_cast<U>(y), static_cast<U>(z));
-    }
 
-    
-    bool Size3::isEqual(const Size3 &other) const
+    inline bool Size3::isEqual(const Size3 &other) const
     {
         return (x == other.x && y == other.y && z == other.z);
     }
@@ -291,7 +284,8 @@ namespace Eris
     }
 
     
-    inline Size3 &Size3::operator=(const std::initializer_list<size_t> &lst)
+    template <typename U>
+    inline Size3 &Size3::operator=(const std::initializer_list<U> &lst)
     {
         set(lst);
         return (*this);
@@ -382,7 +376,7 @@ namespace Eris
     
     inline Size3 operator-(const Size3 &a)
     {
-        return Size3(-a.x, -a.y);
+        return Size3(-a.x, -a.y, -a.z);
     }
 
     
@@ -394,7 +388,7 @@ namespace Eris
     
     inline Size3 operator+(size_t a, const Size3 &b)
     {
-        return b.radd(a);
+        return b.add(a);
     }
 
     
@@ -430,7 +424,7 @@ namespace Eris
     
     inline Size3 operator*(size_t a, const Size3 &b)
     {
-        return b.rmul(a);
+        return b.mul(a);
     }
 
     

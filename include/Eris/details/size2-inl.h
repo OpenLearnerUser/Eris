@@ -11,21 +11,21 @@ namespace Eris
 
     
     template <typename U>
-    Size2::Point(const std::initializer_list<U> &lst)
+    Size2::Size2(const std::initializer_list<U> &lst)
     {
         set(lst);
     }
 
     // Basic setters
     
-    void Size2::set(size_t s)
+    inline void Size2::set(size_t s)
     {
         x = s;
         y = s;
     }
 
     
-    void Size2::set(size_t newX, size_t newY)
+    inline void Size2::set(size_t newX, size_t newY)
     {
         x = newX;
         y = newY;
@@ -33,7 +33,7 @@ namespace Eris
 
     
     template <typename U>
-    void Size2::set(const std::initializer_list<U> &lst)
+    inline void Size2::set(const std::initializer_list<U> &lst)
     {
         ERIS_ASSERT(lst.size() >= 2);
 
@@ -43,305 +43,305 @@ namespace Eris
     }
 
     
-    void Size2::set(const Point &v)
+    inline void Size2::set(const Size2 &v)
     {
-        x = y.x;
+        x = v.x;
         y = v.y;
     }
 
     
-    void Size2::setZero()
+    inline void Size2::setZero()
     {
         x = y = 0;
     }
 
     // Binary operators: new instance = this (+) v
     
-    Size2 Size2::add(size_t v) const
+    inline Size2 Size2::add(size_t v) const
     {
-        return Point(x + v, y + v);
+        return Size2(x + v, y + v);
     }
 
     
-    Size2 Size2::add(const Point &v) const
+    inline Size2 Size2::add(const Size2 &v) const
     {
-        return Point(x + v.x, y + v.y);
+        return Size2(x + v.x, y + v.y);
     }
 
     // Binary operators: new instance = this (-) v
     
-    Size2 Size2::sub(size_t v) const
+    inline Size2 Size2::sub(size_t v) const
     {
-        return Point(x - v, y - v);
+        return Size2(x - v, y - v);
     }
 
     
-    Size2 Size2::sub(const Point &v) const
+    inline Size2 Size2::sub(const Size2 &v) const
     {
-        return Point(x - v.x, y - v.y);
+        return Size2(x - v.x, y - v.y);
     }
 
     
-    Size2 Size2::mul(size_t v) const
+    inline Size2 Size2::mul(size_t v) const
     {
-        return Point(x * v, y * v);
+        return Size2(x * v, y * v);
     }
 
     
-    Size2 Size2::mul(const Point &v) const
+    inline Size2 Size2::mul(const Size2 &v) const
     {
-        return Point(x * v.x, y * v.y);
+        return Size2(x * v.x, y * v.y);
     }
 
     
-    Size2 Size2::div(size_t v) const
+    inline Size2 Size2::div(size_t v) const
     {
-        return Point(x / v, y / v);
+        return Size2(x / v, y / v);
     }
 
     
-    Size2 Size2::div(const Point &v) const
+    inline Size2 Size2::div(const Size2 &v) const
     {
-        return Point(x / v.x, y / v.x);
+        return Size2(x / v.x, y / v.y);
     }
 
     // Binary operators: new instance = v (+) this
     
-    Size2 Size2::rsub(size_t v) const
+    inline Size2 Size2::rsub(size_t v) const
     {
-        return Point(v - x, v - y);
+        return Size2(v - x, v - y);
     }
 
     
-    Size2 Size2::rsub(const Point &v) const
+    inline Size2 Size2::rsub(const Size2 &v) const
     {
-        return Point(v.x - x, v.y - y);
+        return Size2(v.x - x, v.y - y);
     }
 
     
-    Size2 Size2::rdiv(size_t v) const
+    inline Size2 Size2::rdiv(size_t v) const
     {
-        return Point(v / x, v / y);
+        return Size2(v / x, v / y);
     }
 
     
-    Size2 Size2::rdiv(const Point &v) const
+    inline Size2 Size2::rdiv(const Size2 &v) const
     {
-        return Point(v.x / x, v.y / y);
+        return Size2(v.x / x, v.y / y);
     }
 
     // Augmented operators: this (+)= v
     
-    void Size2::iadd(size_t v)
+    inline void Size2::iadd(size_t v)
     {
         x += v;
         y += v;
     }
 
     
-    void Size2::iadd(const Point &v)
+    inline void Size2::iadd(const Size2 &v)
     {
         x += v.x;
         y += v.y;
     }
 
     
-    void Size2::isub(size_t v)
+    inline void Size2::isub(size_t v)
     {
         x -= v;
         y -= v;
     }
 
     
-    void Size2::isub(const Point &v)
+    inline void Size2::isub(const Size2 &v)
     {
         x -= v.x;
         y -= v.y;
     }
 
     
-    void Size2::imul(size_t v)
+    inline void Size2::imul(size_t v)
     {
         x *= v;
         y *= v;
     }
 
     
-    void Size2::imul(const Point &v)
+    inline void Size2::imul(const Size2 &v)
     {
         x *= v.x;
         y *= v.y;
     }
 
     
-    void Size2::idiv(size_t v)
+    inline void Size2::idiv(size_t v)
     {
         x /= v;
         y /= v;
     }
 
     
-    void Size2::idiv(const Point &v)
+    inline void Size2::idiv(const Size2 &v)
     {
         x /= v.x;
         y /= v.y;
     }
 
     
-    const size_t &Size2::at(size_t i) const
+    inline const size_t &Size2::at(size_t i) const
     {
         assert(i < 2);
         return (&x)[i];
     }
 
     
-    size_t &Size2::at(size_t i)
+    inline size_t &Size2::at(size_t i)
     {
         assert(i < 2);
         return (&x)[i];
     }
 
     
-    size_t Size2::sum() const
+    inline size_t Size2::sum() const
     {
         return x + y;
     }
 
     
-    size_t Size2::min() const
+    inline size_t Size2::min() const
     {
         return std::min(x, y);
     }
 
     
-    size_t Size2::max() const
+    inline size_t Size2::max() const
     {
         return std::max(x, y);
     }
 
     
-    size_t Size2::absmin() const
+    inline size_t Size2::absmin() const
     {
         return Eris::absmin(x, y);
     }
 
     
-    size_t Size2::absmax() const
+    inline size_t Size2::absmax() const
     {
         return Eris::absmax(x, y);
     }
 
     
-    size_t Size2::dominantAxis() const
+    inline size_t Size2::dominantAxis() const
     {
         return (std::fabs(x) > std::fabs(y)) ? 0 : 1;
     }
 
     
-    size_t Size2::subminantAxis() const
+    inline size_t Size2::subminantAxis() const
     {
         return (std::fabs(x) < std::fabs(y)) ? 0 : 1;
     }
 
     
-    bool Size2::isEqual(const Point &other) const
+    inline bool Size2::isEqual(const Size2 &other) const
     {
         return (x == other.x && y == other.y);
     }
 
     // Operators
     
-    size_t &Size2::operator[](size_t i)
+    inline size_t &Size2::operator[](size_t i)
     {
         assert(i < 2);
         return (&x)[i];
     }
 
     
-    const size_t &Size2::operator[](size_t i) const
+    inline const size_t &Size2::operator[](size_t i) const
     {
         assert(i < 2);
         return (&x)[i];
     }
 
     
-    Size2 &Size2::operator=(const std::initializer_list<size_t> &lst)
+    inline Size2 &Size2::operator=(const std::initializer_list<size_t> &lst)
     {
         set(lst);
         return (*this);
     }
 
     
-    Size2 &Size2::operator=(const Point &v)
+    inline Size2 &Size2::operator=(const Size2 &v)
     {
         set(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator+=(size_t v)
+    inline Size2 &Size2::operator+=(size_t v)
     {
         iadd(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator+=(const Point &v)
+    inline Size2 &Size2::operator+=(const Size2 &v)
     {
         iadd(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator-=(size_t v)
+    inline Size2 &Size2::operator-=(size_t v)
     {
         isub(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator-=(const Point &v)
+    inline Size2 &Size2::operator-=(const Size2 &v)
     {
         isub(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator*=(size_t v)
+    inline Size2 &Size2::operator*=(size_t v)
     {
         imul(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator*=(const Point &v)
+    inline Size2 &Size2::operator*=(const Size2 &v)
     {
         imul(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator/=(size_t v)
+    inline Size2 &Size2::operator/=(size_t v)
     {
         idiv(v);
         return (*this);
     }
 
     
-    Size2 &Size2::operator/=(const Point &v)
+    inline Size2 &Size2::operator/=(const Size2 &v)
     {
         idiv(v);
         return (*this);
     }
 
     
-    bool Size2::operator==(const Point &v) const
+    inline bool Size2::operator==(const Size2 &v) const
     {
         return isEqual(v);
     }
 
     
-    bool Size2::operator!=(const Point &v) const
+    inline bool Size2::operator!=(const Size2 &v) const
     {
         return !isEqual(v);
     }
@@ -354,9 +354,9 @@ namespace Eris
     }
 
     
-    Size2 operator-(const Size2 &a)
+    inline Size2 operator-(const Size2 &a)
     {
-        return Size2(-a.x, -a.y);
+        return Size2(static_cast<size_t>(-static_cast<ssize_t>(a.x)), static_cast<size_t>(-static_cast<ssize_t>(a.y)));
     }
 
     
@@ -368,7 +368,7 @@ namespace Eris
     
     inline Size2 operator+(size_t a, const Size2 &b)
     {
-        return b.radd(a);
+        return b.add(a);
     }
 
     
@@ -404,7 +404,7 @@ namespace Eris
     
     inline Size2 operator*(size_t a, const Size2 &b)
     {
-        return b.rmul(a);
+        return b.mul(a);
     }
 
     

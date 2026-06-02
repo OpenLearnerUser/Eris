@@ -28,7 +28,8 @@ namespace Eris{
             //! Constructs a vector with zeros.
             Vector();
             //! Constructs vector instance with parameters.
-            template<typename... Params>
+            template<typename... Params,
+                     typename std::enable_if<sizeof...(Params) == N, int>::type = 0>
             Vector(Params... param);
 
             //! Sets all elements to \p s.

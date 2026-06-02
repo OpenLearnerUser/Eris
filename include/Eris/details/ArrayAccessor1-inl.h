@@ -13,7 +13,7 @@ namespace Eris{
 
 
     template<typename T>
-    ArrayAccessor<T,1>::ArrayAccessor(size_t t, T* const data){
+    ArrayAccessor<T,1>::ArrayAccessor(size_t size, T* const data){
           reset(size, data);
     };
 
@@ -107,14 +107,14 @@ namespace Eris{
     template <typename T>
     template <typename Callback>
     void ArrayAccessor<T, 1>::parallelForEach(Callback func){
-        paralleFor(kZeroSize,size(),[&](size_t i){
-            func(i);
-        });
+        parallelFor(kZeroSize, size(), [&](size_t i) {
+            func(_data[i]);
+        }, ExecutionPolicy::KParallel);
     }
     template <typename T>
     template <typename Callback>
     void ArrayAccessor<T, 1>::parallelForEachIndex(Callback func) const{
-        paralleFor(kZeroSize,size(),func);
+        parallelFor(kZeroSize, size(), func, ExecutionPolicy::KParallel);
     }
 
 
@@ -209,7 +209,7 @@ namespace Eris{
     template <typename T>
     template <typename Callback>
     void ConstArrayAccessor<T, 1>::parallelForEachIndex(Callback func) const {
-        parallelFor(kZeroSize, size(), func);
+        parallelFor(kZeroSize, size(), func, ExecutionPolicy::KParallel);
     }
 
     template <typename T>

@@ -3,14 +3,14 @@ set(target unit_tests)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${EXTERNAL_DIR}/googletest/googlemock/include
-    ${EXTERBAL_DIR}/googletest/googletest/include
+    ${EXTERNAL_DIR}/googletest/googletest/include
     )
-file(GLOB
+file(GLOB sources
     ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
-    sources)
+    )
 
 
-add_executable(${target} ${source})
+add_executable(${target} ${sources})
 
 set_target_properties(
     ${target} PROPERTIES
@@ -37,7 +37,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 endif ()
 
 target_compile_options(
-    ${tareget}
+    ${target}
     PRIVATE
     ${DEFAULT_COMPILE_OPTIONS}
 )
@@ -48,6 +48,7 @@ target_link_libraries(${target}
     ${DEFAULT_LINKER_OPTIONS}
     Eris
     gmock
-    gtest)
+    gtest
+    gtest_main)
 
 

@@ -1,5 +1,10 @@
 {
     "cmake.configureArgs": [
         "-DERSI_TASKING_SYSTEM=CPP11Threads"
-    ]
+    ],
+    "cmake.launchTarget": "unit_tests",
+    "cmake.debugConfig": {
+        "program": "${workspaceFolder}/build/bin/unit_tests.exe",
+        "cwd": "${workspaceFolder}/build/bin"
+    }
 }
