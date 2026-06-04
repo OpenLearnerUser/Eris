@@ -45,6 +45,14 @@ namespace Eris
         z = pt.z;
     }
 
+    template<typename T>
+    void Vector<T, 3>::set(const Vector2<T>& pt, T z_)
+    {
+        x = pt.x;
+        y = pt.y;
+        z = z_;
+    }
+
     template <typename T>
     void Vector<T, 3>::setZero()
     {

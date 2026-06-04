@@ -28,41 +28,6 @@ namespace Eris
     void parallelFill(const RandomIterator &begin, const RandomIterator &end, const T &value, ExecutionPolicy Policy = ExecutionPolicy::KParallel);
 
     //!
-    //! \brief      Makes a for-loop from \p beginIndex \p to endIndex in parallel.
-    //!
-    //! This function makes a for-loop specified by begin and end indices in
-    //! parallel. The order of the visit is not guaranteed due to the nature of
-    //! parallel execution.
-    //!
-    //! \param[in]  beginIndex The begin index.
-    //! \param[in]  endIndex   The end index.
-    //! \param[in]  function   The function to call for each index.
-    //! \param[in]  policy     The execution policy (parallel or serial).
-    //!
-    //! \tparam     IndexType  Index type.
-    //! \tparam     Function   Function type.
-    //!
-    template <typename IndexType, typename Function>
-    void parallelFill(IndexType beginIndex, IndexType endIndex, const Function &fun, ExecutionPolicy Policy = ExecutionPolicy::KParallel);
-
-    //!
-    //! \brief      Makes a range-loop from \p beginIndex \p to endIndex in
-    //!             parallel.
-    //!
-    //! This function makes a for-loop specified by begin and end indices in
-    //! parallel. Unlike parallelFor function, the input function object takes range
-    //! instead of single index. The order of the visit is not guaranteed due to the
-    //! nature of parallel execution.
-    //!
-    //! \param[in]  beginIndex The begin index.
-    //! \param[in]  endIndex   The end index.
-    //! \param[in]  function   The function to call for each index range.
-    //! \param[in]  policy     The execution policy (parallel or serial).
-    //!
-    //! \tparam     IndexType  Index type.
-    //! \tparam     Function   Function type.
-    //!
-    //!
     //! \brief      Makes a for-loop from \p beginIndex \p to endIndex in
     //!             parallel.
     //!
@@ -180,6 +145,34 @@ namespace Eris
                      IndexType beginIndexZ, IndexType endIndexZ,
                      const Function &function,
                      ExecutionPolicy policy = ExecutionPolicy::KParallel);
+
+    //!
+    //! \brief      Makes a 3D nested range-loop in parallel.
+    //!
+    //! This function makes a 3D nested for-loop specified by begin and end indices
+    //! for each dimension. X will be the inner-most loop while Z is the outer-most.
+    //! Unlike parallelFor function, the input function object takes range instead
+    //! of single index. The order of the visit is not guaranteed due to the nature
+    //! of parallel execution.
+    //!
+    //! \param[in]  beginIndexX The begin index in X dimension.
+    //! \param[in]  endIndexX   The end index in X dimension.
+    //! \param[in]  beginIndexY The begin index in Y dimension.
+    //! \param[in]  endIndexY   The end index in Y dimension.
+    //! \param[in]  beginIndexZ The begin index in Z dimension.
+    //! \param[in]  endIndexZ   The end index in Z dimension.
+    //! \param[in]  function    The function to call for each index range.
+    //! \param[in]  policy      The execution policy (parallel or serial).
+    //!
+    //! \tparam     IndexType   Index type.
+    //! \tparam     Function    Function type.
+    //!
+    template <typename IndexType, typename Function>
+    void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
+                          IndexType beginIndexY, IndexType endIndexY,
+                          IndexType beginIndexZ, IndexType endIndexZ,
+                          const Function &function,
+                          ExecutionPolicy policy = ExecutionPolicy::KParallel);
 
     //!
     //! \brief      Performs reduce operation in parallel.

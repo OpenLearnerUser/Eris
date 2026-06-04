@@ -102,12 +102,12 @@ namespace Eris
                 pool.reserve(2);
                 auto launchRange = [compareFunction](RandomIterator begin, size_t k2, RandomIterator2 temp, unsigned int numThreads)
                 {
-                    parallelMergeSort(begin, k2, temp, numThreads);
+                    parallelMergeSort(begin, k2, temp, numThreads, compareFunction);
                 };
                 pool.emplace_back(internal::async([=]()
                                                   { launchRange(a, size / 2, temp, numThreads / 2); }));
                 pool.emplace_back(internal::async([=]()
-                                                  { a + size / 2, size - size / 2, temp + size / 2, numThreads - numThreads / 2; }));
+                                                  { launchRange(a + size / 2, size - size / 2, temp + size / 2, numThreads - numThreads / 2); }));
 
                 for (auto &f : pool)
                 {
@@ -121,6 +121,16 @@ namespace Eris
         }
 
     };
+
+    template <typename RandomIterator, typename T>
+    void parallelFill(const RandomIterator &begin, const RandomIterator &end,
+                      const T &value, ExecutionPolicy policy)
+    {
+        if (begin >= end) return;
+        auto n = static_cast<size_t>(end - begin);
+        parallelFor(kZeroSize, n, [&](size_t i)
+                    { *(begin + i) = value; }, policy);
+    }
 
     template <typename Indextype, typename Function>
     void parallelFor(Indextype start, Indextype end,
@@ -200,7 +210,7 @@ namespace Eris
                                             : 1;
         Indextype n = end - start + 1;
         Indextype slice = (Indextype)std::round(n / static_cast<double>(numThreads));
-        slice = std::max(slice, 1);
+        slice = std::max(slice, Indextype(1));
 
         std::vector<std::future<void>> pool;
 
@@ -296,7 +306,7 @@ namespace Eris
                                             : 1;
         Indextype n = end - start + 1;
         Indextype slice = (Indextype)std::round(n / static_cast<double>(numThreads));
-        slice = std::max(slice, 1);
+        slice = std::max(slice, Indextype(1));
 
         std::vector<Value> results(numThreads, identity);
 
@@ -304,7 +314,7 @@ namespace Eris
         {
             results[tid] = func(k1, k2, identity);
         };
-        std::vector<std::function<void>> pool;
+        std::vector<std::future<void>> pool;
         pool.reserve(numThreads);
 
         Indextype i1 = start;
@@ -324,7 +334,7 @@ namespace Eris
                 internal::async([=]()
                                 { launchRange(i1, end, tid); }));
         }
-        for (auto *&f : pool)
+        for (auto &f : pool)
         {
             if (f.valid())
             {

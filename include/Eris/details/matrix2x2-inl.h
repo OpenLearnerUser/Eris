@@ -361,7 +361,7 @@ namespace Eris
     T Matrix<T, 2, 2>::sum() const
     {
         T s = 0;
-        for (int i = 0; i < 4; ++i)
+        for (size_t i = 0; i < 4; ++i)
         {
             s += _elements[i];
         }
@@ -391,15 +391,15 @@ namespace Eris
     template <typename T>
     T Matrix<T, 2, 2>::absmin() const
     {
-        return ::jet::absmin(::jet::absmin(_elements[0], _elements[1]),
-                             ::jet::absmin(_elements[2], _elements[3]));
+        return Eris::absmin( Eris::absmin(_elements[0], _elements[1]),
+                             Eris::absmin(_elements[2], _elements[3]));
     }
 
     template <typename T>
     T Matrix<T, 2, 2>::absmax() const
     {
-        return ::jet::absmax(::jet::absmax(_elements[0], _elements[1]),
-                             ::jet::absmax(_elements[2], _elements[3]));
+        return  Eris::absmax(Eris::absmax(_elements[0], _elements[1]),
+                             Eris::absmax(_elements[2], _elements[3]));
     }
 
     template <typename T>

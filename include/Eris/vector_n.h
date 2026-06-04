@@ -36,7 +36,7 @@ namespace Eris{
         VectorN(size_t n ,const T &val=0);
         //! Constructs vector instance with initializer list.
         template <typename U>
-        VectorN(const std::initializer_list<T> &lst);
+        VectorN(const std::initializer_list<U> &lst);
 
         //! Constructs vector with expression template.
         template <typename E>
@@ -77,12 +77,12 @@ namespace Eris{
         // MARK: Basic getters
 
         //! Returns the size of the vector.
-        constexpr size_t size() const;
+        size_t size() const;
 
         //! Returns the raw pointer to the vector data.
         T *data();
         //! Returns the const raw pointer to the vector data.
-        const T *const data() const;
+        const T *data() const;
         //! Returns the begin iterator of the vector.
         //! Returns the begin iterator of the vector.
         typename ContainerType::iterator begin();
@@ -132,7 +132,7 @@ namespace Eris{
         //! Returns the index of the subminant axis.
         size_t subminantAxis() const;
 
-        VectorScalarDiv<T, VectorN> normalized() const;
+        VectorScalarDiv<T, VectorN<T>> normalized() const;
 
         //! Returns the length of the vector.
         T length() const;
@@ -156,33 +156,33 @@ namespace Eris{
         bool isEqual(const E &other) const;
         //! Returns true if \p other is similar to this vector.
         template <typename E>
-        bool isSimilar(const E &other, T epsilon = std::numeric_limits<T>::epsilin()) const;
+        bool isSimilar(const E &other, T epsilon = std::numeric_limits<T>::epsilon()) const;
 
         // MARK: Binary operations: new instance = this (+) v
 
         //! Computes this + v.
         template <typename E>
-        VectorAdd<T, VectorN, E> add(const E &v) const;
-        //! Computes this - (s, s, ... , s).
-        VectorScalarAdd<T, VectorN> add(const T &s) const;
+        VectorAdd<T, VectorN<T>, E> add(const E &v) const;
+        //! Computes this + (s, s, ... , s).
+        VectorScalarAdd<T, VectorN<T>> add(const T &s) const;
 
         //! Computes this - v.
         template <typename E>
-        VectorSub<T, VectorN, E> sub(const E &v) const;
+        VectorSub<T, VectorN<T>, E> sub(const E &v) const;
         //! Computes this - (s, s, ... , s).
-        VectorScalarSub<T, VectorN> sub(const T &s) const;
+        VectorScalarSub<T, VectorN<T>> sub(const T &s) const;
 
-        //! Computes this - v.
+        //! Computes this * v.
         template <typename E>
-        VectorMul<T, VectorN, E> mul(const E &v) const;
-        //! Computes this - (s, s, ... , s).
-        VectorScalarMul<T, VectorN> mul(const T &s) const;
+        VectorMul<T, VectorN<T>, E> mul(const E &v) const;
+        //! Computes this * (s, s, ... , s).
+        VectorScalarMul<T, VectorN<T>> mul(const T &s) const;
 
-        //! Computes this - v.
+        //! Computes this / v.
         template <typename E>
-        VectorDiv<T, VectorN, E> div(const E &v) const;
-        //! Computes this - (s, s, ... , s).
-        VectorScalarDiv<T, VectorN> div(const T &s) const;
+        VectorDiv<T, VectorN<T>, E> div(const E &v) const;
+        //! Computes this / (s, s, ... , s).
+        VectorScalarDiv<T, VectorN<T>> div(const T &s) const;
 
         //! Computes dot product.
         template <typename E>
@@ -191,18 +191,18 @@ namespace Eris{
         // MARK: Binary operations: new instance = v (+) this
 
         //! Computes (s, s, ... , s) - this.
-        VectorScalarRSub<T, VectorN> rsub(const T &s);
+        VectorScalarRSub<T, VectorN<T>> rsub(const T &s);
 
         //! Computes v - this.
         template <typename E>
-        VectorSub<T, VectorN, E> rsub(const E &v) const;
+        VectorSub<T, VectorN<T>, E> rsub(const E &v) const;
 
         //! Computes (s, s, ... , s) / this.
-        VectorScalarRDiv<T, VectorN> rdiv(const T &s);
+        VectorScalarRDiv<T, VectorN<T>> rdiv(const T &s);
 
         //! Computes v / this.
         template <typename E>
-        VectorDiv<T, VectorN, E> rdiv(const E &v) const;
+        VectorDiv<T, VectorN<T>, E> rdiv(const E &v) const;
 
         // MARK: Augmented operations: this (+)= v
 
@@ -291,7 +291,7 @@ namespace Eris{
         VectorN &operator=(const VectorN &other);
 
     
-        VectorN &operator=(const VectorN &&other);
+        VectorN &operator=(VectorN &&other);
 
         //! Computes this += (s, s, ... , s)
         VectorN &operator+=(const T &s);
@@ -333,4 +333,10 @@ namespace Eris{
         ContainerType _elements;
 
     };
+
+    // MARK: Type aliases
+    using VectorND = VectorN<double>;
+    using VectorNF = VectorN<float>;
 }
+
+#include "details/vector_n-inl.h"

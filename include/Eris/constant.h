@@ -11,4 +11,8 @@ namespace Eris{
     //! Zero ssize_t.
     constexpr ssize_t kZeroSSize = 0;
 
+
+
+    constexpr double kPiD = 3.14159265358979323846264338327950288;
+
 }

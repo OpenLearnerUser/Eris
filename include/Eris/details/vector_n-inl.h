@@ -10,18 +10,18 @@ namespace Eris{
 
 
     template<typename T>
-    VectorN<T>::Vector(){
+    VectorN<T>::VectorN(){
         setZero();
     }
 
    
     template <typename T>
-    VectorN<T>::VectorN(size_t n ,const T &val = 0):_elements(n,val){
+    VectorN<T>::VectorN(size_t n ,const T &val):_elements(n,val){
     }
 
     template <typename T>
     template <typename U>
-    VectorN<T>::VectorN(const std::initializer_list<T> &lst){
+    VectorN<T>::VectorN(const std::initializer_list<U> &lst){
         set(lst);
     }
 
@@ -32,18 +32,18 @@ namespace Eris{
     }
 
     template <typename T>
-    void VectorN<T>::VectorN(const VectorN &others){
+    VectorN<T>::VectorN(const VectorN &others){
         set(others);
     }
 
     template <typename T>
-    void VectorN<T>::VectorN(VectorN &&others){
+    VectorN<T>::VectorN(VectorN &&others){
         (*this)=std::move(others);
     }
 
     // MARK: Basic setters
     template <typename T>
-    void VectorN<T>::resize(size_t n, const T &val = 0){
+    void VectorN<T>::resize(size_t n, const T &val){
         _elements.resize(n,val);
     }
     template <typename T>
@@ -52,8 +52,8 @@ namespace Eris{
     }
 
     template <typename T>
-    void set(const T &s){
-        parallelFill(begin(), end(), s);
+    void VectorN<T>::set(const T &s){
+        std::fill(_elements.begin(), _elements.end(), s);
     }
 
     template <typename T>
@@ -67,8 +67,8 @@ namespace Eris{
     void VectorN<T>::set(const VectorExpression<T, E> &other){
         _elements.resize(other.size());
 
-        const E& e=other();
-        parallelForEachIndex([&](size_t i){_elements[i]=e[i];});
+        const E& e=static_cast<const E&>(other);
+        parallelFor(kZeroSize, other.size(), [&](size_t i){_elements[i]=e[i];});
     }
 
     template <typename T>
@@ -93,7 +93,7 @@ namespace Eris{
     // MARK: Basic getters
 
     template <typename T>
-    constexpr VectorN<T>::size_t size() const{
+    size_t VectorN<T>::size() const{
         return _elements.size();
     }
 
@@ -103,53 +103,53 @@ namespace Eris{
     }
 
     template <typename T>
-    const T *const VectorN<T>::data() const{
+    const T* VectorN<T>::data() const{
         return _elements.data();
     }
 
     template <typename T>
-    typename VectorN<T>::ContainerType::iterator begin(){
+    typename VectorN<T>::ContainerType::iterator VectorN<T>::begin(){
         return _elements.begin();
     }
 
     template <typename T>
-    typename VectorN<T>::ContainerType::const_iterator begin() const{
-        _elements.cbegin();
+    typename VectorN<T>::ContainerType::const_iterator VectorN<T>::begin() const{
+        return _elements.cbegin();
     }
 
     template <typename T>
-    typename VectorN<T>::ContainerType::iterator end(){
-        _elements.end();
+    typename VectorN<T>::ContainerType::iterator VectorN<T>::end(){
+        return _elements.end();
     }
 
     template <typename T>
-    typename VectorN<T>::ContainerType::const_iterator end() const{
-        _elements.cend();
+    typename VectorN<T>::ContainerType::const_iterator VectorN<T>::end() const{
+        return _elements.cend();
     }
 
     template <typename T>
-    ArrayAccessor1<T> VectorN<T>::accessor(){
-        return ArrayAccessor1(size(),data());
+    ArrayAccessor<T, 1> VectorN<T>::accessor(){
+        return ArrayAccessor<T, 1>(size(),data());
     }
 
     template <typename T>
-    ConstArrayAccessor1<T> VectorN<T>::constAccessor() const{
-        return ConstArrayAccessor1(size(), data());
+    ConstArrayAccessor<T, 1> VectorN<T>::constAccessor() const{
+        return ConstArrayAccessor<T, 1>(size(), data());
     }
 
     template <typename T>
     T VectorN<T>::at(size_t i) const{
-        _elements[i];
+        return _elements[i];
     }
 
     template <typename T>
     T &VectorN<T>::at(size_t i){
-        _elements[i];
+        return _elements[i];
     }
 
     template <typename T>
     T VectorN<T>::sum() const{
-        return paralleReduce(KZeroSize,size(),T(0),[&](size_t start,size_t end,T init){
+        return parallelReduce(kZeroSize,size(),T(0),[&](size_t start,size_t end,T init){
             T result=init;
             for(size_t i=start;i<end;++i){
                 result +=_elements[i];
@@ -159,7 +159,9 @@ namespace Eris{
     }
 
     template <typename T>
-    T VectorN<T>::avg() const;
+    T VectorN<T>::avg() const{
+        return sum() / static_cast<T>(size());
+    }
 
     template <typename T>
     T VectorN<T>::min() const{
@@ -175,7 +177,8 @@ namespace Eris{
 
     template <typename T>
     T VectorN<T>::max() const{
-        return parallelReduce(kZeroSize, size(), std::numeric_limits<T>::min(), [&](size_t start, size_t end, T init)
+        const T &(*_max)(const T &, const T &) = std::max<T>;
+        return parallelReduce(kZeroSize, size(), std::numeric_limits<T>::lowest(), [&](size_t start, size_t end, T init)
                               {
                               T result = init;
                               for (size_t i = start; i < end; ++i) {
@@ -208,7 +211,7 @@ namespace Eris{
 
     template <typename T>
     size_t VectorN<T>::dominantAxis() const{
-        auto iter = std::max_element(begin(), end(), [](const const T &a, const T &b)
+        auto iter = std::max_element(begin(), end(), [](const T &a, const T &b)
                                      { return std::fabs(a) < std::fabs(b); });
         return iter-begin();
     }
@@ -220,9 +223,10 @@ namespace Eris{
         return iter - begin();
     }
 
-    VectorScalarDiv<T, VectorN> VectorN<T>::normalized() const{
+    template <typename T>
+    VectorScalarDiv<T, VectorN<T>> VectorN<T>::normalized() const{
         T len = length();
-        return VectorScalarDiv<T, VectorN>(*this, len);
+        return VectorScalarDiv<T, VectorN<T>>(*this, len);
     }
 
     template <typename T>
@@ -280,7 +284,7 @@ namespace Eris{
 
     template <typename T>
     template <typename E>
-    bool VectorN<T>::isSimilar(const E &other, T epsilon = std::numeric_limits<T>::epsilin()) const{
+    bool VectorN<T>::isSimilar(const E &other, T epsilon) const{
         if(size()!=other.size()){
             return false;
         }
@@ -298,44 +302,45 @@ namespace Eris{
 
     template <typename T>
     template <typename E>
-    VectorAdd<T, VectorN, E> VectorN<T>::add(const E &v) const{
-        return VectorAdd<T,VectorN,E>(*this,v);
+    VectorAdd<T, VectorN<T>, E> VectorN<T>::add(const E &v) const{
+        return VectorAdd<T, VectorN<T>, E>(*this,v);
     }
 
     template <typename T>
-    VectorScalarAdd<T, VectorN> VectorN<T>::add(const T &s) const{
-        return VectorScalarAdd<T, VectorN>(*this,s);
-    }
-
-    template <typename T>
-    template <typename E>
-    VectorSub<T, VectorN, E> VectorN<T>::sub(const E &v) const{
-        return VectorSub<T, VectorN, E>(*this, v);
-    }
-
-    template <typename T>
-    VectorScalarSub<T, VectorN> VectorN<T>::sub(const T &s) const{
-        return VectorScalarSub<T, VectorN>(*this, s);
+    VectorScalarAdd<T, VectorN<T>> VectorN<T>::add(const T &s) const{
+        return VectorScalarAdd<T, VectorN<T>>(*this,s);
     }
 
     template <typename T>
     template <typename E>
-    VectorMul<T, VectorN, E> VectorN<T>::mul(const E &v) const{
-        return VectorMul<T, VectorN, E>(*this, v);
+    VectorSub<T, VectorN<T>, E> VectorN<T>::sub(const E &v) const{
+        return VectorSub<T, VectorN<T>, E>(*this, v);
     }
+
     template <typename T>
-    VectorScalarMul<T, VectorN> VectorN<T>::mul(const T &s) const{
-        return VectorScalarMul<T, VectorN>(*this,s);
+    VectorScalarSub<T, VectorN<T>> VectorN<T>::sub(const T &s) const{
+        return VectorScalarSub<T, VectorN<T>>(*this, s);
     }
 
     template <typename T>
     template <typename E>
-    VectorDiv<T, VectorN, E> VectorN<T>::div(const E &v) const{
-        return VectorDiv<T, VectorN, E>(*this, v);
+    VectorMul<T, VectorN<T>, E> VectorN<T>::mul(const E &v) const{
+        return VectorMul<T, VectorN<T>, E>(*this, v);
     }
     template <typename T>
-    VectorScalarDiv<T, VectorN> VectorN<T>::div(const T &s) const{
-        return VectorScalarDiv<T, VectorN>(*this, s);
+    VectorScalarMul<T, VectorN<T>> VectorN<T>::mul(const T &s) const{
+        return VectorScalarMul<T, VectorN<T>>(*this,s);
+    }
+
+    template <typename T>
+    template <typename E>
+    VectorDiv<T, VectorN<T>, E> VectorN<T>::div(const E &v) const{
+        return VectorDiv<T, VectorN<T>, E>(*this, v);
+    }
+
+    template <typename T>
+    VectorScalarDiv<T, VectorN<T>> VectorN<T>::div(const T &s) const{
+        return VectorScalarDiv<T, VectorN<T>>(*this, s);
     }
 
     template <typename T>
@@ -359,26 +364,26 @@ namespace Eris{
     // MARK: Binary operations: new instance = v (+) this
 
     template <typename T>
-    VectorScalarRSub<T, VectorN> VectorN<T>::rsub(const T &s){
-        return VectorScalarRSub<T, VectorN>(*this, s);
+    VectorScalarRSub<T, VectorN<T>> VectorN<T>::rsub(const T &s){
+        return VectorScalarRSub<T, VectorN<T>>(*this, s);
     }
 
     template <typename T>
     template <typename E>
-    VectorSub<T, VectorN, E> VectorN<T>::rsub(const E &v) const{
-        return VectorSub<T, VectorN, E>(v, *this);
+    VectorSub<T, VectorN<T>, E> VectorN<T>::rsub(const E &v) const{
+        return VectorSub<T, VectorN<T>, E>(v, *this);
     }
 
     template <typename T>
-    VectorScalarRDiv<T, VectorN> VectorN<T>::rdiv(const T &s){
-        return VectorScalarRDiv<T, VectorN>(*this, s);
-        
+    VectorScalarRDiv<T, VectorN<T>> VectorN<T>::rdiv(const T &s){
+        return VectorScalarRDiv<T, VectorN<T>>(*this, s);
+
     }
 
     template <typename T>
     template <typename E>
-    VectorDiv<T, VectorN, E> VectorN<T>::rdiv(const E &v) const{
-        return VectorDiv<T, VectorN, E>(v, *this);
+    VectorDiv<T, VectorN<T>, E> VectorN<T>::rdiv(const E &v) const{
+        return VectorDiv<T, VectorN<T>, E>(v, *this);
     }
 
     // MARK: Augmented operations: this (+)= v
@@ -448,84 +453,88 @@ namespace Eris{
     }
 
     template <typename T>
-    T &VectorN<T>::operator[](size_t){
+    T &VectorN<T>::operator[](size_t i){
         return _elements[i];
     }
 
     template <typename T>
     template <typename U>
-    VectorN &VectorN<T>::operator=(const std::initializer_list<U> &lst){
+    VectorN<T> &VectorN<T>::operator=(const std::initializer_list<U> &lst){
         set(lst);
         return *this;
     }
 
     template <typename T>
     template <typename E>
-    VectorN &VectorN<T>::operator=(const VectorExpression<T, E> &other){
+    VectorN<T> &VectorN<T>::operator=(const VectorExpression<T, E> &other){
         set(other);
         return *this;
     }
     template <typename T>
-    VectorN &operator=(const VectorN &other){
+    VectorN<T> &VectorN<T>::operator=(const VectorN &other){
         set(other);
         return *this;
     }
 
     template <typename T>
-    VectorN &operator=(const VectorN &&other)
+    VectorN<T> &VectorN<T>::operator=(VectorN &&other)
     {
         _elements = std::move(other._elements);
         return *this;
     }
 
     template<typename T>
-    VectorN &VectorN<T>::operator+=(const T &s){
+    VectorN<T> &VectorN<T>::operator+=(const T &s){
         iadd(s);
         return *this;
     }
 
     //! Computes this += v
+    template <typename T>
     template <typename E>
-    VectorN &VectorN<T>::operator+=(const E &v){
+    VectorN<T> &VectorN<T>::operator+=(const E &v){
         iadd(v);
         return *this;
     }
 
     template<typename T>
-    VectorN &VectorN<T>::operator-=(const T &s){
+    VectorN<T> &VectorN<T>::operator-=(const T &s){
         isub(s);
         return *this;
     }
 
     //! Computes this -= v
+    template <typename T>
     template <typename E>
-    VectorN &VectorN<T>::operator-=(const E &v){
+    VectorN<T> &VectorN<T>::operator-=(const E &v){
         isub(v);
         return *this;
     }
 
-    template<typename T> 
-    VectorN &VectorN<T>::operator*=(const T &s){
+    template<typename T>
+    VectorN<T> &VectorN<T>::operator*=(const T &s){
         imul(s);
         return *this;
     }
 
     //! Computes this *= v
+    template <typename T>
     template <typename E>
-    VectorN &VectorN<T>::operator*=(const E &v){
+    VectorN<T> &VectorN<T>::operator*=(const E &v){
         imul(v);
         return *this;
     }
 
-    template<typename T> 
-    VectorN &VectorN<T>::operator/=(const T &s){
+    template<typename T>
+    VectorN<T> &VectorN<T>::operator/=(const T &s){
         idiv(s);
         return *this;
     }
 
     //! Computes this /= v
+    template <typename T>
     template <typename E>
-    VectorN &VectorN<T>::operator/=(const E &v){
+    VectorN<T> &VectorN<T>::operator/=(const E &v){
         idiv(v);
         return *this;
     }

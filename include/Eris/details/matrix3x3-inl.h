@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <Eris/math_utils.h>
 #include <algorithm>
 #include <cstring>
@@ -467,6 +466,29 @@ namespace Eris
         return sum() / 9;
     }
 
+
+    template <typename T>
+    inline T minn(const T *x, size_t n)
+    {
+        T m = x[0];
+        for (size_t i = 1; i < n; i++)
+        {
+            m = std::min(m, x[i]);
+        }
+        return m;
+    }
+
+    template <typename T>
+    inline T maxn(const T *x, size_t n)
+    {
+        T m = x[0];
+        for (size_t i = 1; i < n; i++)
+        {
+            m = std::max(m, x[i]);
+        }
+        return m;
+    }
+
     template <typename T>
     T Matrix<T, 3, 3>::min() const
     {
@@ -810,5 +832,3 @@ namespace Eris
     }
 
 } // namespace jet
-
-

@@ -358,3 +358,4 @@ namespace Eris
                                    const Vector4<T> &v2, const Vector4<T> &v3, T f);
 
 }
+#include "details/vector4-inl.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eris/vector.h>
+#include  <Eris/vector2.h>
 #include <algorithm> // just make cpplint happy..
 #include <limits>
 #include <tuple>
@@ -35,7 +36,9 @@ namespace Eris
         template <typename U>
         Vector(const std::initializer_list<U> &lst);
         //! Copy constructor.
-        Vector(const Vector &other) : x(other.x), y(other.y),z(other.z) {};
+        constexpr Vector(const Vector &other) : x(other.x), y(other.y),z(other.z) {};
+
+        constexpr Vector(const Vector2<T>& v,T z_) : x(v.x), y(v.y), z(z_) {};
         //! Set all x, y and z components to \p s.
         void set(T v);
         //! Set x, y and z components with given parameters.
@@ -43,6 +46,9 @@ namespace Eris
         //! Set x, y and z components with given initializer list.
         template <typename U>
         void set(const std::initializer_list<U> &lst);
+
+         //! Set x, y, and z components with given \p pt.x, \p pt.y, and \p z.
+        void set(const Vector2<T>& pt, T z_);
         //! Set x, y and z with other vector \p pt.
         void set(const Vector &pt);
         //! Set all x, y and z to zero.
@@ -328,9 +334,6 @@ namespace Eris
     typedef Vector3<double> Vector3D;
 
     // MARK: Extensions
-
-    template <typename T>
-    constexpr T zero = T();
 
     //! Returns float-type zero vector.
     template <>

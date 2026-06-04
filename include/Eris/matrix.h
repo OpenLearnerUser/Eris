@@ -36,8 +36,8 @@ namespace Eris{
 
             typedef std::array<T,M*N> ContainerType;
             
-            typedef ContainerType::iterator Iterator;
-            typedef ContainerType::const_iterator ConstIterator;
+            typedef typename ContainerType::iterator Iterator;
+            typedef typename ContainerType::const_iterator ConstIterator;
 
             //! Default constructor.
             //! \warning This constructor will create zero matrix.
@@ -72,13 +72,13 @@ namespace Eris{
 
             //! Constructs matrix instance with given matrix expression.
             template<typename E>
-            Matrix(const MatrixExpression<E>& other);
+            Matrix(const MatrixExpression<T,E>& other);
 
             //! Resizes to m x n matrix with initial value \p s.
             void resize(size_t m,size_t n,const T& value=T(0));
 
             //! Sets all elements to \p value.
-            void set(T value);
+            void set(const T& value);
 
             //!
             //! \brief Sets a matrix with given initializer list \p lst.
@@ -105,7 +105,7 @@ namespace Eris{
             void set(const MatrixExpression<T, E> &other);
 
             //! Sets diagonal elements to \p value.
-            void setDiagonal(T value);
+            void setDiagonal(const T& value);
 
 
             //! Sets off-diagonal elements to \p value.
@@ -120,7 +120,7 @@ namespace Eris{
             //!
             //! \param value Value to be set to the off-diagonal elements.
             //!
-            void setOffDiagonal(T value);
+            void setOffDiagonal(const T& value);
 
             //! Sets i-th row with input vector.
             template<typename E>
@@ -129,7 +129,7 @@ namespace Eris{
 
             //! Sets i-th column with input vector.
             template<typename E>
-            void setCol(size_t col,const VectorExpression<T, E>& other);
+            void setColumn(size_t col,const VectorExpression<T, E>& other);
 
 
             //! Checks if the matrix is equal to input matrix expression.
@@ -155,7 +155,7 @@ namespace Eris{
             //!
             //! \return True if the matrix is square, False otherwise.
             //!
-            bool isSquare()const;
+            constexpr bool isSquare() const;
 
 
             constexpr Size2 size()const;
@@ -167,7 +167,7 @@ namespace Eris{
             constexpr size_t cols()const;
 
             //! Returns the pointer to the data of the matrix.
-            T* data()const;
+            T* data();
 
             const T* const data()const;
 
@@ -184,14 +184,14 @@ namespace Eris{
 
 
             //! Adds a scalar value to all elements of the matrix.
-            MatrixScalarAdd<T, Matrix> add(const T& value);
+            MatrixScalarAdd<T, Matrix> add(const T& value) const;
 
             //! Returns this matrix + input matrix (element-wise).
             template <typename E>
             MatrixAdd<T, Matrix, E> add(const E &m) const;
 
             //! Subtracts a scalar value to all elements of the matrix.
-            MatrixScalarSub<T, Matrix> sub(const T &value);
+            MatrixScalarSub<T, Matrix> sub(const T &value) const;
 
             //! Returns this matrix - input matrix (element-wise).
             template <typename E>
@@ -199,19 +199,19 @@ namespace Eris{
 
 
             //! Multiplies all elements of the matrix by \p value.
-            MatrixScalarMul<T,Matrix> mul(const T &value);
+            MatrixScalarMul<T,Matrix> mul(const T &value) const;
 
             //! Multiplies this matrix by input vector.
             template< typename VE>
-            MatrixVectorMul<T, Matrix,VE> mul(const VectorExpression<T, VE> &other);
+            MatrixVectorMul<T, Matrix,VE> mul(const VectorExpression<T, VE> &other) const;
 
             //! Multiplies this matrix by input matrix.
             template <size_t L>
-            MatrixMul<T, Matrix, Matrix<T, N, L>> mul(const Matrix<T, N, L> &other);
+            MatrixMul<T, Matrix, Matrix<T, N, L>> mul(const Matrix<T, N, L> &other) const;
 
 
             //! Divides all elements of the matrix by \p value.
-            MatrixScalardiv<T,Matrix> div(const T &value);
+            MatrixScalarDiv<T,Matrix> div(const T &value) const;
 
             // MARK: Binary operator methods - new instance = input (+) this instance
             //! Returns input scalar + this matrix.
@@ -327,7 +327,7 @@ namespace Eris{
             Matrix inverse() const;
 
             template <typename U>
-            MatrixTypeCast<U, Matrix, T> castTo() const;
+            MatrixTypeCast<U, Matrix> castTo() const;
 
             // MARK: Setter operators
 
