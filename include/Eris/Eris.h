@@ -17,6 +17,7 @@
 #include <Eris/array2.h>
 #include <Eris/array3.h>
 #include <Eris/constant.h>
+#include <Eris/cpp_utils.h>
 #include <Eris/functors.h>
 #include <Eris/macro.h>
 #include <Eris/math_utils.h>
@@ -26,6 +27,7 @@
 #include <Eris/matrix4x4.h>
 #include <Eris/matrix_csr.h>
 #include <Eris/matrix_expression.h>
+#include <Eris/matrix_mxn.h>
 #include <Eris/parallel.h>
 #include <Eris/point.h>
 #include <Eris/point2.h>

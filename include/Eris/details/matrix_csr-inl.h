@@ -4,6 +4,9 @@
 #include <Eris/math_utils.h>
 #include <Eris/parallel.h>
 
+
+#include <numeric>
+
 namespace Eris
 {
 
@@ -16,7 +19,7 @@ namespace Eris
     }
 
     template <typename T, typename VE>
-    T operator[](size_t i) const
+    T MatrixCsrVectorMul<T, VE>::operator[](size_t i) const
     {
         auto rp = _m.rowPointersBegin();   // 行指针数组 (长度 n_rows+1)
         auto ci = _m.columnIndicesBegin(); // 列索引数组 (长度 nnz)
@@ -24,6 +27,7 @@ namespace Eris
 
         size_t colbegin = rp[i];
         size_t colend = rp[i + 1];
+        T sum = T(0);
 
         for (size_t jj = colbegin; jj < colend; jj++)
         {
@@ -33,6 +37,13 @@ namespace Eris
 
         return sum;
     }
+
+    template <typename T, typename VE>
+    size_t MatrixCsrVectorMul<T, VE>::size() const
+    {
+        return _m.rows();
+    }
+
     template <typename T, typename ME>
     MatrixCsrMatrixMul<T, ME>::MatrixCsrMatrixMul(const MatrixCsr<T> &m1,
                                                   const ME &m2)
@@ -68,7 +79,7 @@ namespace Eris
         size_t colend = _rp[i + 1];
         for (size_t jj = colbegin; jj < colend; jj++)
         {
-            size_t k = ci[jj];
+            size_t k = _ci[jj];
             sum += _nnz[jj] * _m2(k, j);
         }
 
@@ -191,13 +202,19 @@ namespace Eris
     template <typename E>
     void MatrixCsr<T>::compress(const MatrixExpression<T, E> &other, T epsilon)
     {
-        auto M = other.size();
+       
+        const E &expr = other();
 
-        Size2 size = M.size();
+        Size2 size = expr.size();
         size_t numRows = size.x;
         size_t numCols = size.y;
 
-        const Expression<T, E> &expr = other;
+        _size = {numRows, numCols};
+
+        _nonZeros.clear();
+        _columnIndices.clear();
+        _rowPointers.clear();
+
 
         for (size_t i = 0; i < numRows; i++)
         {
@@ -226,23 +243,27 @@ namespace Eris
         ssize_t numRowsToAdd = (ssize_t)element.i - _size.x + 1;
         if (numRowsToAdd > 0)
         {
+            for (ssize_t k = 0; k < numRowsToAdd; ++k)
             {
                 addRow({}, {});
             }
-            _size.y = std::max(_size.y, element.j + 1);
+        }
 
-            size_t rowBegin = _rowPointers[element.i];
-            size_t rowEnd = _rowPointers[element.i + 1];
+        _size.y = std::max(_size.y, element.j + 1);
 
-            auto colIdxIter = std::lower_bound(_columnIndices.begin() + rowBegin, _columnIndices.begin() + rowEnd, element.j);
-            auto offset = colIdxIter - _columnIndices.begin();
-            _columnIndices.insert(colIdxIter, element.j);
-            _nonZeros.insert(_nonZeros.begin() + offset, element.value);
+        size_t rowBegin = _rowPointers[element.i];
+        size_t rowEnd = _rowPointers[element.i + 1];
 
-            for (size_t i = element.i + 1; i < _rowPointers.size(); ++i)
-            {
-                ++_rowPointers[i];
-            }
+        auto colIdxIter = std::lower_bound(_columnIndices.begin() + rowBegin,
+                                           _columnIndices.begin() + rowEnd,
+                                           element.j);
+        auto offset = colIdxIter - _columnIndices.begin();
+        _columnIndices.insert(colIdxIter, element.j);
+        _nonZeros.insert(_nonZeros.begin() + offset, element.value);
+
+        for (size_t i = element.i + 1; i < _rowPointers.size(); ++i)
+        {
+            ++_rowPointers[i];
         }
     }
     template <typename T>
@@ -254,23 +275,21 @@ namespace Eris
         std::vector<std::pair<T, size_t>> zipped;
         for (size_t i = 0; i < nonZeros.size(); i++)
         {
-            {
-                zipped.push_back({nonZeros[i], columnIndices[i]});
-                _size.y = std::max(_size.y, columnIndices[i] + 1);
-            }
-
-            std::sort(zipped.begin(), zipped.end(),
-                      [](std::pair<T, size_t> a, std::pair<T, size_t> b)
-                      {
-                          return a.second < b.second;
-                      });
-            for (size_t i = 0; i < zipped.size(); i++)
-            {
-                _nonZeros.push_back(zipped[i].first);
-                _columnIndices.push_back(zipped[i].second);
-            }
-            _rowPointers.push_back(_nonZeros.size());
+            zipped.push_back({nonZeros[i], columnIndices[i]});
+            _size.y = std::max(_size.y, columnIndices[i] + 1);
         }
+
+        std::sort(zipped.begin(), zipped.end(),
+                  [](std::pair<T, size_t> a, std::pair<T, size_t> b)
+                  {
+                      return a.second < b.second;
+                  });
+        for (size_t i = 0; i < zipped.size(); i++)
+        {
+            _nonZeros.push_back(zipped[i].first);
+            _columnIndices.push_back(zipped[i].second);
+        }
+        _rowPointers.push_back(_nonZeros.size());
     }
 
     template <typename T>
@@ -733,9 +752,9 @@ namespace Eris
                               {
                               T result = init;
                               for (size_t i = start; i < end; ++i) {
-                                  result = jet::absmin(result, _nonZeros[i]);
+                                  result = Eris::absmin(result, _nonZeros[i]);
                               }
-                              return result; }, jet::absmin<T>);
+                              return result; }, Eris::absmin<T>);
     }
 
     template <typename T>
@@ -745,9 +764,9 @@ namespace Eris
                               {
                               T result = init;
                               for (size_t i = start; i < end; ++i) {
-                                  result = jet::absmax(result, _nonZeros[i]);
+                                  result = Eris::absmax(result, _nonZeros[i]);
                               }
-                              return result; }, jet::absmax<T>);
+                              return result; }, Eris::absmax<T>);
     }
 
     template <typename T>

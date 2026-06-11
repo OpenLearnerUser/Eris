@@ -19,7 +19,7 @@ include_directories(include)
 include_directories(extern)
 
 
-#message("CMake build Type:" ${CMAKE_BUILD_TYPE})
+message("CMake build Type:" ${CMAKE_BUILD_TYPE})
 if (NOT ${CMAKE_BUILD_TYPE})
     SET(CMAKE_BUILD_TYPE Debug)
     add_definitions(-DDEBUG)

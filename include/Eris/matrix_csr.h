@@ -3,8 +3,11 @@
 #include <Eris/size2.h>
 #include <Eris/vector_n.h>
 
+namespace Eris
+{
 
-namespace Eris {
+    template <typename T>
+    class MatrixCsr;
     //!
     //! \brief Vector expression for CSR matrix-vector multiplication.
     //!
@@ -15,18 +18,18 @@ namespace Eris {
     //! \tparam VE  Vector expression.
     //!
     template <typename T, typename VE>
-    class MatrixCrsVectorMul:public VectorExpression<T,MatrixCrsVectorMul<T,VE>>{
-        public:
-        MatrixCrsVectorMul(const MatrixCrs<T>& m,const VE& v);
-        size_t size()const;
+    class MatrixCsrVectorMul : public VectorExpression<T, MatrixCsrVectorMul<T, VE>>
+    {
+    public:
+        MatrixCsrVectorMul(const MatrixCsr<T> &m, const VE &v);
+        size_t size() const;
 
-        T operator[](size_t i)const;
+        T operator[](size_t i) const;
 
-        private:
-        const MatrixCrs<T>& _m;
-        const VE& _v;
-        const VE* _v2;
-
+    private:
+        const MatrixCsr<T> &_m;
+        const VE &_v;
+        const VE *_v2;
     };
 
     //!
@@ -40,20 +43,21 @@ namespace Eris {
     //! \tparam ME  Matrix expression.
     //!
     template <typename T, typename ME>
-    class MatrixCrsMatrixMul:public MatrixExpression<T,MatrixCrsMatrixMul<T,ME>>{
-        public:
-        MatrixCrsMatrixMul(const MatrixCrs<T>& m,const ME& e);
-        Size2 size()const;
+    class MatrixCsrMatrixMul : public MatrixExpression<T, MatrixCsrMatrixMul<T, ME>>
+    {
+    public:
+        MatrixCsrMatrixMul(const MatrixCsr<T> &m, const ME &e);
+        Size2 size() const;
 
         size_t rows() const;
 
         size_t cols() const;
 
-        T operator()(size_t i,size_t j)const;
+        T operator()(size_t i, size_t j) const;
 
-        private:
-        const MatrixCrs<T>& _m;
-        const ME& _m2;
+    private:
+        const MatrixCsr<T> &_m1;
+        const ME &_m2;
         const T *const _nnz;
         const size_t *const _rp;
         const size_t *const _ci;
@@ -69,18 +73,19 @@ namespace Eris {
     //!
     //! \tparam T Type of the element.
     //!
-   template <typename T>
+    template <typename T>
     class MatrixCsr : public MatrixExpression<T, MatrixCsr<T>>
     {
     public:
-        static_assert(std::is_floating_point_v<T>::value, "MatrixCrs only can be instantiated with floating point types");
+        static_assert(std::is_floating_point_v<T>, " MatrixCsr only can be instantiated with floating point types");
 
-        struct Element{
+        struct Element
+        {
+            size_t i;
+            size_t j;
             T value;
-            size_t rp;
-            size_t ci;
             Element();
-            Element(size_t i,size_t j,const T& value);
+            Element(size_t i, size_t j, const T &value);
         };
 
         typedef std::vector<T> NonZeroContainerType;
@@ -460,4 +465,4 @@ namespace Eris {
     typedef MatrixCsr<double> MatrixCsrD;
 }
 
-#include "detail/matrix_csr-inl.h"
+#include "details/matrix_csr-inl.h"
